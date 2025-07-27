@@ -1,0 +1,26 @@
+services:
+  database:
+    image: postgres:latest
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: invoicemanager
+  static:
+    image: nginx:latest
+    volumes:
+      - static:/usr/share/nginx/html/static
+    ports:
+      - 443:443
+  invoice-manager-web:
+    image: invoice-manager-web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DJANGO_SUPERUSER_USERNAME: root
+      DJANGO_SUPERUSER_PASSWORD: p@5$w0rD
+      DJANGO_DEBUG: false
+    depends_on:
+      - database
+      - static
