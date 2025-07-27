@@ -32,7 +32,7 @@ class InvoiceAdminConfig(ModelAdmin):
         'total',
         'invoice_id',
         'date',
-        'user',
+        'user_id__username',
         'created_at',
         'updated_at'
     )
@@ -43,7 +43,7 @@ class InvoiceAdminConfig(ModelAdmin):
         'total',
         'invoice_id',
         'date',
-        'user',
+        'user_id__username',
         'created_at',
         'updated_at'
     )
@@ -60,7 +60,7 @@ class InvoiceAdminConfig(ModelAdmin):
             url = reverse(
                 'admin:auth_user_change',
                 args = (
-                    invoice.user_id.id
+                    invoice.user_id.id,
                 )
             ),
             text = invoice.user_id.username
