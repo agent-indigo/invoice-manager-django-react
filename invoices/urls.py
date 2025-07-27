@@ -54,7 +54,7 @@ urlpatterns = [
 ]
 # Serve static files only during development
 if DEBUG is True:
-    urlpatterns += static(
+    urlpatterns.append(static(
         STATIC_URL,
         document_root = STATIC_ROOT
-    )
+    ))
