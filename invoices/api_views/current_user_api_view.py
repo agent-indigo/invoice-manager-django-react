@@ -6,6 +6,9 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from ..serializers import UserSerializer
 class CurrentUserApiView(RetrieveAPIView):
+    """
+    API view for retrieving the currently logged in user.
+    """
     permission_classes = [
         IsAuthenticated,
     ]
