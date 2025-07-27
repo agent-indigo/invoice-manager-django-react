@@ -12,7 +12,7 @@ class UserSerializer(ModelSerializer):
         User serializer metadata
         """
         model = User
-        fields = (
+        fields = [
             'id',
             'username',
             'email',
@@ -20,4 +20,4 @@ class UserSerializer(ModelSerializer):
             'last_name',
             'is_superuser',
             'is_staff'
-        )
+        ]

@@ -11,7 +11,7 @@ class InvoiceAdminConfig(ModelAdmin):
     """
     Listings app admin config
     """
-    list_display = (
+    list_display = [
         'vendor',
         'subtotal',
         'hst',
@@ -21,11 +21,11 @@ class InvoiceAdminConfig(ModelAdmin):
         'user',
         'created_at',
         'updated_at'
-    )
-    list_display_links = (
-        'invoice_id',
-    )
-    list_filter = (
+    ]
+    list_display_links = [
+        'invoice_id'
+    ]
+    list_filter = [
         'vendor',
         'subtotal',
         'hst',
@@ -35,8 +35,8 @@ class InvoiceAdminConfig(ModelAdmin):
         'user_id__username',
         'created_at',
         'updated_at'
-    )
-    search_fields = (
+    ]
+    search_fields = [
         'vendor',
         'subtotal',
         'hst',
@@ -46,7 +46,7 @@ class InvoiceAdminConfig(ModelAdmin):
         'user_id__username',
         'created_at',
         'updated_at'
-    )
+    ]
     list_per_page = 20
     def user(
         self: 'InvoiceAdminConfig',
@@ -59,9 +59,9 @@ class InvoiceAdminConfig(ModelAdmin):
             '<a href="{url}">{text}</a>',
             url = reverse(
                 'admin:auth_user_change',
-                args = (
-                    invoice.user_id.id,
-                )
+                args = [
+                    invoice.user_id.id
+                ]
             ),
             text = invoice.user_id.username
         )
