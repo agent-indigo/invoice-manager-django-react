@@ -18,9 +18,15 @@ from django.contrib.admin import site
 from django.urls import path, include
 from django.conf.urls.static import static
 from knox import views as knox_views
-from .api_views import CurrentUserApiView, LogInApiView, RegistrationApiView
+from rest_framework.routers import DefaultRouter
+from .api_views import CurrentUserApiView, InvoiceApiViewSet, LogInApiView, RegistrationApiView
 from .settings import DEBUG, STATIC_URL, STATIC_ROOT
 from .views import index
+ROUTER = DefaultRouter()
+ROUTER.register(
+    'api/invoices',
+    InvoiceApiViewSet
+)
 urlpatterns = [
     path(
         '',
@@ -50,7 +56,8 @@ urlpatterns = [
     path(
         'api/auth/register/',
         RegistrationApiView.as_view()
-    )
+    ),
+    ROUTER.urls
 ]
 # Serve static files only during development
 if DEBUG is True:
