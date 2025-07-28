@@ -46,10 +46,7 @@ class InvoiceApiViewSet(ModelViewSet):
         """
         Update an invoice
         """
-        return serializer.update(
-            id = self.kwargs.get('pk'),
-            user_id = self.request.user.id
-        )
+        return serializer.save()
     def perform_destroy(
         self: 'InvoiceApiViewSet',
         instance: Invoice
@@ -57,7 +54,4 @@ class InvoiceApiViewSet(ModelViewSet):
         """
         Delete an invoice
         """
-        Invoice.objects.delete(
-            id = self.kwargs.get('pk'),
-            user_id = self.request.user.id
-        )
+        instance.delete()
