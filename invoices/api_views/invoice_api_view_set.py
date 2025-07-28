@@ -10,6 +10,7 @@ class InvoiceApiViewSet(ModelViewSet):
     """
     Invoice API view set
     """
+    queryset = Invoice.objects.none()
     serializer_class = InvoiceSerializer
     permission_classes = [
         IsAuthenticated

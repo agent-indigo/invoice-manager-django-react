@@ -37,6 +37,10 @@ urlpatterns = [
         site.urls
     ),
     path(
+        'api/',
+        include(ROUTER.urls)
+    ),
+    path(
         'api/auth/',
         include('knox.urls')
     ),
@@ -56,8 +60,7 @@ urlpatterns = [
     path(
         'api/auth/register/',
         RegistrationApiView.as_view()
-    ),
-    ROUTER.urls
+    )
 ]
 # Serve static files only during development
 if DEBUG is True:
