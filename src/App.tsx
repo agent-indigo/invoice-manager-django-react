@@ -8,12 +8,13 @@ import {
 } from 'react-router-dom'
 import {Container} from 'react-bootstrap'
 import {ToastContainer} from 'react-toastify'
-import ContextProvider from './components/ContextProvider'
+import {Provider} from 'react-redux'
 import Footer from './components/Footer'
+import store from './redux/store'
 import 'bootswatch/dist/united/bootstrap.css'
 import 'react-toastify/dist/ReactToastify.css'
 const App: FunctionComponent = (): ReactElement => (
-  <ContextProvider>
+  <Provider store={store}>
     <BrowserRouter>
       <main className="py-3">
         <Container>
@@ -25,6 +26,6 @@ const App: FunctionComponent = (): ReactElement => (
       <Footer/>
       <ToastContainer/>
     </BrowserRouter>
-  </ContextProvider>
+  </Provider>
 )
 export default App
