@@ -43,6 +43,9 @@ class InvoiceApiViewSet(ModelViewSet):
         self: 'InvoiceApiViewSet',
         serializer: InvoiceSerializer
     ) -> Invoice:
+        """
+        Update an invoice
+        """
         return serializer.update(
             id = self.kwargs.get('pk'),
             user_id = self.request.user.id
@@ -51,6 +54,9 @@ class InvoiceApiViewSet(ModelViewSet):
         self: 'InvoiceApiViewSet',
         instance: Invoice
     ) -> None:
+        """
+        Delete an invoice
+        """
         Invoice.objects.delete(
             id = self.kwargs.get('pk'),
             user_id = self.request.user.id
