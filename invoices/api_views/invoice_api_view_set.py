@@ -40,7 +40,7 @@ class InvoiceApiViewSet(ModelViewSet):
         return serializer.save(
             user_id = self.request.user.id
         )
-    def perform_update(
+    def partial_update(
         self: 'InvoiceApiViewSet',
         serializer: InvoiceSerializer
     ) -> Invoice:
