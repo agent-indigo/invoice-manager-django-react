@@ -45,20 +45,20 @@ urlpatterns = [
         include('knox.urls')
     ),
     path(
-        'api/auth/user/',
+        'api/auth/user',
         CurrentUserApiView.as_view()
     ),
     path(
-        'api/auth/login/',
+        'api/auth/login',
         LogInApiView.as_view()
     ),
     path(
-        'api/auth/logout/',
+        'api/auth/logout',
         knox_views.LogoutView.as_view(),
         name = 'knox_logout'
     ),
     path(
-        'api/auth/register/',
+        'api/auth/register',
         RegistrationApiView.as_view()
     )
 ]
