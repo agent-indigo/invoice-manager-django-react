@@ -1,7 +1,10 @@
 """
 Invoices app admin config
 """
-from django.contrib.admin import ModelAdmin, site
+from django.contrib.admin import (
+    ModelAdmin,
+    site
+)
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import SafeText

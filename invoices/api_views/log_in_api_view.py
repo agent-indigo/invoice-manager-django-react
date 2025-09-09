@@ -5,7 +5,10 @@ from urllib.request import Request
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from knox.models import AuthToken
-from ..serializers import LogInSerializer, UserSerializer
+from ..serializers import (
+    LogInSerializer,
+    UserSerializer
+)
 class LogInApiView(GenericAPIView):
     """
     Log in API View

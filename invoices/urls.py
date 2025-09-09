@@ -15,12 +15,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib.admin import site
-from django.urls import path, include
+from django.urls import (
+    path,
+    include
+)
 from django.conf.urls.static import static
 from knox import views as knox_views
 from rest_framework.routers import DefaultRouter
-from .api_views import CurrentUserApiView, InvoiceApiViewSet, LogInApiView, RegistrationApiView
-from .settings import DEBUG, STATIC_URL, STATIC_ROOT
+from .api_views import (
+    ConfigStatusApiView,
+    CreateSuperuserApiView,
+    CurrentUserApiView,
+    InvoiceApiViewSet,
+    LogInApiView,
+    RegistrationApiView
+)
+from .settings import (
+    DEBUG,
+    STATIC_URL,
+    STATIC_ROOT
+)
 from .views import index
 ROUTER = DefaultRouter()
 ROUTER.register(
@@ -60,6 +74,14 @@ urlpatterns = [
     path(
         'api/auth/register',
         RegistrationApiView.as_view()
+    ),
+    path(
+        'api/config/status',
+        ConfigStatusApiView.as_view()
+    ),
+    path(
+        'api/config/createRootUser',
+        CreateSuperuserApiView.as_view()
     )
 ]
 # Serve static files only during development

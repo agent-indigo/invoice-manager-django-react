@@ -1,5 +1,5 @@
 """
-Registration serializer
+Serializer for creating a superuser if one does not exist.
 """
 from rest_framework.serializers import (
     ModelSerializer,
@@ -7,17 +7,16 @@ from rest_framework.serializers import (
 )
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-class RegistrationSerializer(ModelSerializer):
+class CreateSuperuserSerializer(ModelSerializer):
     """
-    Registration serializer
+    Serializer for creating a superuser if one does not exist.
     """
     class Meta:
         """
-        Registration serializer metadata
+        CreateSuperuserSerializer metadata
         """
         model = User
         fields = [
-            'username',
             'email',
             'password',
             'confirmPassword',
@@ -30,15 +29,18 @@ class RegistrationSerializer(ModelSerializer):
             }
         }
     def create(
-        self: 'RegistrationSerializer',
+        self: 'CreateSuperuserSerializer',
         validated_data: object
     ) -> User:
         """
-        Create a new user.
+        Create a new superuser.
         """
-        if not User.objects.filter(is_superuser=True).exists():
+        validated_data['username'] = 'root'
+        if User.objects.filter(
+            is_superuser = True
+        ).exists():
             raise ValidationError({
-                'no_superuser': "A superuser must be created first."
+                'superuser_exists': "A superuser already exists."
             })
         if validated_data['password'] != validated_data['confirmPassword']:
             raise ValidationError({
@@ -51,15 +53,15 @@ class RegistrationSerializer(ModelSerializer):
                 'username': "A user with this username already exists."
             })
         validated_data.pop('confirmPassword')
-        return User.objects.create_user(
+        return User.objects.create_superuser(
             **validated_data
         )
     def validate(
-        self: 'RegistrationSerializer',
+        self: 'CreateSuperuserSerializer',
         attrs: object
     ) -> object:
         """
-        Validate the new user's credentials and log them in.
+        Validate the new superuser's credentials and log them in.
         """
         if not authenticate(
             username = attrs['username'],

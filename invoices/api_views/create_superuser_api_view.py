@@ -1,25 +1,25 @@
 """
-Registration API View
+API view for creating a superuser if none exists
 """
 from urllib.request import Request
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from knox.models import AuthToken
 from ..serializers import (
-    RegistrationSerializer,
+    CreateSuperuserSerializer,
     UserSerializer
 )
-class RegistrationApiView(GenericAPIView):
+class CreateSuperuserApiView(GenericAPIView):
     """
-    Registration API View
+    API view for creating a superuser if none exists
     """
-    serializer_class = RegistrationSerializer
+    serializer_class = CreateSuperuserSerializer
     def post(
-        self: 'RegistrationApiView',
+        self: 'CreateSuperuserApiView',
         request: Request
     ) -> Response:
         """
-        Registration request handler
+        Superuser creation request handler
         """
         serializer = self.get_serializer(
             data = request.data

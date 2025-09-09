@@ -1,7 +1,11 @@
 """
 Serializer for logging in a user
 """
-from rest_framework.serializers import CharField, Serializer, ValidationError
+from rest_framework.serializers import (
+    CharField,
+    Serializer,
+    ValidationError
+)
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 class LogInSerializer(Serializer):
@@ -12,10 +16,7 @@ class LogInSerializer(Serializer):
     password = CharField()
     def validate(
         self: 'LogInSerializer',
-        attrs: dict[
-            str,
-            str
-        ]
+        attrs: object
       ) -> User:
         """
         Log in request handler
