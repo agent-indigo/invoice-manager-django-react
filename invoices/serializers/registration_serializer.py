@@ -61,7 +61,14 @@ class RegistrationSerializer(ModelSerializer):
                 'name': "A user with this first and last name already exists."
             })
         validated_data.pop('confirm_password')
-        return User.objects.create_user(
+        if User.objects.filter(
+            is_superuser = True
+        ).exists():
+            return User.objects.create_user(
+                **validated_data
+            )
+        validated_data['username'] = 'root'
+        return User.objects.create_superuser(
             **validated_data
         )
     def validate(
