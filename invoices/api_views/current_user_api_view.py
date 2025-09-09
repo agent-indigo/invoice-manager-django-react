@@ -14,4 +14,7 @@ class CurrentUserApiView(RetrieveAPIView):
     ]
     serializer_class = UserSerializer
     def get_object(self: 'CurrentUserApiView') -> User:
+        """
+        Get the currently logged in user.
+        """
         return self.request.user

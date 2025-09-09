@@ -34,6 +34,9 @@ class RegistrationSerializer(ModelSerializer):
             object
         ]
     ) -> User:
+        """
+        Create a new user
+        """
         if validated_data['password'] != validated_data['confirm_password']:
             raise ValidationError({
                 'password': "Passwords do not match."
@@ -42,7 +45,20 @@ class RegistrationSerializer(ModelSerializer):
             username = validated_data['username']
         ).exists():
             raise ValidationError({
-                'username': "Username already exists."
+                'username': "A user with this username already exists."
+            })
+        if User.objects.filter(
+            email = validated_data['email']
+        ).exists():
+            raise ValidationError({
+                'email': "A user with this email already exists."
+            })
+        if User.objects.filter(
+            first_name = validated_data['first_name'],
+            last_name = validated_data['last_name']
+        ).exists():
+            raise ValidationError({
+                'name': "A user with this first and last name already exists."
             })
         validated_data.pop('confirm_password')
         return User.objects.create_user(
@@ -58,6 +74,9 @@ class RegistrationSerializer(ModelSerializer):
         str,
         object
     ]:
+        """
+        Validate the user credentials and log them in.
+        """
         if not authenticate(
             username = attrs['username'],
             password = attrs['password']
