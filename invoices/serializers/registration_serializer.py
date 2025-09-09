@@ -1,7 +1,7 @@
 """
 Registration serializer
 """
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .user_serializer import UserSerializer
@@ -18,6 +18,7 @@ class RegistrationSerializer(ModelSerializer):
             'username',
             'email',
             'password',
+            'confirm_password',
             'first_name',
             'last_name'
         ]
@@ -33,10 +34,20 @@ class RegistrationSerializer(ModelSerializer):
             object
         ]
     ) -> User:
-        user = User.objects.create_user(
+        if validated_data['password'] != validated_data['confirm_password']:
+            raise ValidationError({
+                'password': "Passwords do not match."
+            })
+        if User.objects.filter(
+            username = validated_data['username']
+        ).exists():
+            raise ValidationError({
+                'username': "Username already exists."
+            })
+        validated_data.pop('confirm_password')
+        return User.objects.create_user(
             **validated_data
         )
-        return user
     def validate(
         self: 'RegistrationSerializer',
         attrs: dict[
