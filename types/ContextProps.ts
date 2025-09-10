@@ -10,8 +10,6 @@ export default interface ContextProps {
   setUser: Dispatch<SetStateAction<User | undefined>>
   token?: string
   setToken: Dispatch<SetStateAction<string | undefined>>
-  users: User[]
-  setUsers: Dispatch<SetStateAction<User[]>>
   invoices: Invoice[]
   setInvoices: Dispatch<SetStateAction<Invoice[]>>
   configStatus: ConfigStatus

@@ -16,8 +16,6 @@ import ConfigStatus from '@/types/ConfigStatus'
 const AppContext: Context<ContextProps> = createContext<ContextProps>({
   setUser: (): void => {},
   setToken: (): void => {},
-  users: [],
-  setUsers: (): void => {},
   invoices: [],
   setInvoices: (): void => {},
   configStatus: {
@@ -30,10 +28,6 @@ const ContextProvider: FunctionComponent<PropsWithChildren> = ({children}): Reac
     user,
     setUser
   ] = useState<User | undefined>(undefined)
-  const [
-    users,
-    setUsers
-  ] = useState<User[]>([])
   const [
     invoices,
     setInvoices
@@ -65,8 +59,6 @@ const ContextProvider: FunctionComponent<PropsWithChildren> = ({children}): Reac
       setUser,
       token,
       setToken,
-      users,
-      setUsers,
       invoices,
       setInvoices,
       configStatus,
