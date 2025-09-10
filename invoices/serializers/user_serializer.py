@@ -15,9 +15,6 @@ class UserSerializer(ModelSerializer):
         fields = [
             'id',
             'username',
-            'email',
-            'first_name',
-            'last_name',
             'is_superuser',
             'is_staff'
         ]
