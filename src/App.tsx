@@ -20,6 +20,7 @@ import PrivateRoute from './security/PrivateRoute'
 import StaffRoute from './security/StaffRoute'
 import SuperuserRoute from './security/SuperuserRoute'
 import CreateSuperuserPage from './pages/CreateSuperuserPage'
+import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import InvoicesListPage from './pages/InvoicesListPage'
@@ -37,20 +38,11 @@ const App: FunctionComponent = (): ReactElement => (
               path='/'
               element={<ProductionRoute/>}
             >
-              <Route 
-                path='setup/'
-                element={<Outlet/>}
-              >
-                <Route
-                  path='createSuperuser/'
-                  element={<CreateSuperuserRoute/>}
-                >
-                  <Route
-                    path=''
-                    element={<CreateSuperuserPage/>}
-                  />
-                </Route>
-              </Route>
+              <Route
+                index={true}
+                path=''
+                element={<HomePage/>}
+              />
               <Route
                 path=''
                 element={<LoginRoute/>}
@@ -68,6 +60,10 @@ const App: FunctionComponent = (): ReactElement => (
                 path=''
                 element={<PrivateRoute/>}
               >
+                <Route
+                  path='logout'
+                  element={<HomePage/>}
+                />
                 <Route
                   path='invoices/'
                   element={<Outlet/>}
@@ -89,6 +85,20 @@ const App: FunctionComponent = (): ReactElement => (
                   path='superuser'
                   element={<SuperuserRoute/>}
                 ></Route>
+              <Route 
+                path='setup/'
+                element={<Outlet/>}
+              >
+                <Route
+                  path='createSuperuser/'
+                  element={<CreateSuperuserRoute/>}
+                >
+                  <Route
+                    path=''
+                    element={<CreateSuperuserPage/>}
+                  />
+                </Route>
+              </Route>
               </Route>
             </Route>
           </Routes>
