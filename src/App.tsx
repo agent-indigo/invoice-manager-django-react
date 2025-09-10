@@ -11,6 +11,7 @@ import {
 import {Container} from 'react-bootstrap'
 import {ToastContainer} from 'react-toastify'
 import ContextProvider from './components/ContextProvider'
+import Header from './components/Header'
 import Footer from './components/Footer'
 import SetRootPasswordRoute from './security/SetRootPasswordRoute'
 import ProductionRoute from './security/ProductionRoute'
@@ -23,6 +24,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const App: FunctionComponent = (): ReactElement => (
   <ContextProvider>
     <BrowserRouter>
+    <Header/>
       <main className="py-3">
         <Container>
           <Routes>
