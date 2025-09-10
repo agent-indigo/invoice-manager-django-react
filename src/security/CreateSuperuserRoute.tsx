@@ -9,7 +9,7 @@ import {
 import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
 import ConfigStatus from '@/types/ConfigStatus'
-const SetRootPasswordRoute: FunctionComponent = (): ReactElement => {
+const CreateSuperuserRoute: FunctionComponent = (): ReactElement => {
   const {configStatus}: ContextProps = useGetContext()
   const {rootExists}: ConfigStatus = configStatus
   return rootExists ? (
@@ -21,4 +21,4 @@ const SetRootPasswordRoute: FunctionComponent = (): ReactElement => {
     <Outlet/>
   )
 }
-export default SetRootPasswordRoute
+export default CreateSuperuserRoute

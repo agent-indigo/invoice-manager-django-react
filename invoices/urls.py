@@ -80,7 +80,7 @@ urlpatterns = [
         ConfigStatusApiView.as_view()
     ),
     path(
-        'api/config/createRootUser',
+        'api/config/createSuperuser',
         CreateSuperuserApiView.as_view()
     )
 ]

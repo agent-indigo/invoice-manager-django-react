@@ -35,7 +35,6 @@ class CreateSuperuserSerializer(ModelSerializer):
         """
         Create a new superuser.
         """
-        validated_data['username'] = 'root'
         if User.objects.filter(
             is_superuser = True
         ).exists():

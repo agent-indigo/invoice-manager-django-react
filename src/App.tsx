@@ -13,12 +13,13 @@ import {ToastContainer} from 'react-toastify'
 import ContextProvider from './components/ContextProvider'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import SetRootPasswordRoute from './security/SetRootPasswordRoute'
+import CreateSuperuserRoute from './security/CreateSuperuserRoute'
 import ProductionRoute from './security/ProductionRoute'
 import LoginRoute from './security/LoginRoute'
 import PrivateRoute from './security/PrivateRoute'
 import StaffRoute from './security/StaffRoute'
 import SuperuserRoute from './security/SuperuserRoute'
+import CreateSuperuserPage from './pages/CreateSuperuserPage'
 import InvoicesListPage from './pages/InvoicesListPage'
 import AddInvoicePage from './pages/AddInvoicePage'
 import 'bootswatch/dist/united/bootstrap.css'
@@ -30,19 +31,24 @@ const App: FunctionComponent = (): ReactElement => (
       <main className="py-3">
         <Container>
           <Routes>
-            <Route 
-              path='setup/'
-              element={<Outlet/>}
-            >
-              <Route
-                path='setRootPassword'
-                element={<SetRootPasswordRoute/>}
-              ></Route>
-            </Route>
             <Route
               path='/'
               element={<ProductionRoute/>}
             >
+              <Route 
+                path='setup/'
+                element={<Outlet/>}
+              >
+                <Route
+                  path='createSuperuser/'
+                  element={<CreateSuperuserRoute/>}
+                >
+                  <Route
+                    path=''
+                    element={<CreateSuperuserPage/>}
+                  />
+                </Route>
+              </Route>
               <Route
                 path=''
                 element={<LoginRoute/>}
