@@ -19,6 +19,8 @@ import LoginRoute from './security/LoginRoute'
 import PrivateRoute from './security/PrivateRoute'
 import StaffRoute from './security/StaffRoute'
 import SuperuserRoute from './security/SuperuserRoute'
+import InvoicesListPage from './pages/InvoicesListPage'
+import AddInvoicePage from './pages/AddInvoicePage'
 import 'bootswatch/dist/united/bootstrap.css'
 import 'react-toastify/dist/ReactToastify.css'
 const App: FunctionComponent = (): ReactElement => (
@@ -49,6 +51,19 @@ const App: FunctionComponent = (): ReactElement => (
                 path=''
                 element={<PrivateRoute/>}
               >
+                <Route
+                  path='invoices/'
+                  element={<Outlet/>}
+                >
+                  <Route
+                    path='list'
+                    element={<InvoicesListPage/>}
+                  />
+                  <Route
+                    path='add'
+                    element={<AddInvoicePage/>}
+                  />
+                </Route>
                 <Route
                   path='staff'
                   element={<StaffRoute/>}
