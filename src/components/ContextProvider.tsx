@@ -49,9 +49,16 @@ const ContextProvider: FunctionComponent<PropsWithChildren> = ({children}): Reac
     setToken
   ] = useState<string | undefined>(undefined)
   useEffect((): void => {(async (): Promise<void> => {
-    const response: Response = await fetch('/api/config/status')
-    response.ok ? setConfigStatus(await response.json()) : toast.error(await response.text())
-  })()}, [])
+    const configStatusResponse: Response = await fetch('/api/config/status')
+    const userResponse: Response = await fetch('/api/auth/user')
+    configStatusResponse.ok ? setConfigStatus(await configStatusResponse.json()) : toast.error(await configStatusResponse.text())
+    if (userResponse.ok) {
+      setUser(await userResponse.json())
+    } else {
+      setUser(undefined)
+      setToken(undefined)
+    }
+  })()})
   return (
     <AppContext.Provider value={{
       user,
