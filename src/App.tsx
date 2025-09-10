@@ -20,6 +20,7 @@ import PrivateRoute from './security/PrivateRoute'
 import StaffRoute from './security/StaffRoute'
 import SuperuserRoute from './security/SuperuserRoute'
 import CreateSuperuserPage from './pages/CreateSuperuserPage'
+import LoginPage from './pages/LoginPage'
 import InvoicesListPage from './pages/InvoicesListPage'
 import AddInvoicePage from './pages/AddInvoicePage'
 import 'bootswatch/dist/united/bootstrap.css'
@@ -52,7 +53,12 @@ const App: FunctionComponent = (): ReactElement => (
               <Route
                 path=''
                 element={<LoginRoute/>}
-              ></Route>
+              >
+                <Route
+                  path='login'
+                  element={<LoginPage/>}
+                />
+              </Route>
               <Route
                 path=''
                 element={<PrivateRoute/>}
