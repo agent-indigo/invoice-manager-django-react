@@ -295,6 +295,15 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
               type='button'
               variant='danger'
               className='p-auto text-white'
+              onClick={(): void => navigate('/')}
+              disabled={loading}
+            >
+              <FaTimes/> Cancel
+            </Button>
+            <Button
+              type='button'
+              variant='danger'
+              className='p-auto text-white'
               onClick={(): void => handleDelete()}
               disabled={
                 loading ||
