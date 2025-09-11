@@ -22,6 +22,7 @@ class UserSerializer(ModelSerializer):
             'last_name',
             'email',
             'username',
+            'newUsername',
             'password',
             'newPassword',
             'confirmPassword',
@@ -38,6 +39,7 @@ class UserSerializer(ModelSerializer):
             'last_login'
         ]
         write_only_fields = [
+            'newUsername',
             'password',
             'newPassword',
             'confirmPassword'
@@ -97,24 +99,32 @@ class UserSerializer(ModelSerializer):
         """
         Edit a user
         """
-        if 'password' in validated_data:
-            if not authenticate(
-                username = instance.username,
-                password = validated_data['password']
-            ):
+        if not 'password' in validated_data or validated_data.get('password') == '':
+            raise ValidationError({
+                'password': "Password is required."
+            })
+        if not authenticate(
+            username = instance.username,
+            password = validated_data['password']
+        ):
+            raise ValidationError({
+                'password': "Invalid credentials."
+            })
+        if 'newUsername' in validated_data and validated_data.get('newUsername') != '':
+            if User.objects.filter(
+                username = validated_data['newUsername']
+            ).exists():
                 raise ValidationError({
-                    'password': "Current password is incorrect."
+                    'newUsername': "A user with this username already exists."
                 })
-            if not 'newPassword' in validated_data or validated_data.get('newPassword') == '':
-                raise ValidationError({
-                    'newPassword': "New password cannot be empty."
-                })
+            instance.username = validated_data['newUsername']
+            validated_data.pop('newUsername')
+        if 'newPassword' in validated_data and validated_data.get('newPassword') != '':
             if validated_data['newPassword'] != validated_data.get('confirmPassword'):
                 raise ValidationError({
                     'newPassword': "Passwords do not match."
                 })
             instance.set_password(validated_data['newPassword'])
-            validated_data.pop('password')
             validated_data.pop('newPassword')
             validated_data.pop('confirmPassword')
         for attr, value in validated_data.items():

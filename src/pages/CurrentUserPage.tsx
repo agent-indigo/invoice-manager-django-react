@@ -1,17 +1,38 @@
 import {
+  ChangeEvent,
   FunctionComponent,
+  KeyboardEvent,
   ReactElement,
   useState
 } from 'react'
+import {
+  NavigateFunction,
+  useNavigate
+} from 'react-router-dom'
 import {Helmet} from 'react-helmet'
 import {toast} from 'react-toastify'
+import {
+  FaKey,
+  FaCheck,
+  FaIdBadge,
+  FaEnvelope,
+  FaUser,
+  FaTimes
+} from 'react-icons/fa'
+import {
+  Form,
+  Button
+} from 'react-bootstrap'
 import ContextProps from '@/types/ContextProps'
 import {useGetContext} from '../components/ContextProvider'
+import Loader from '../components/Loader'
+import FormContainer from '../components/FormContainer'
 const CurrentUserPage: FunctionComponent = (): ReactElement => {
   const {
     user,
     setUser,
-    token
+    token,
+    setToken
   }: ContextProps = useGetContext()
   const [
     first_name,
@@ -26,8 +47,8 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
     setEmail
   ] = useState<string>(user?.email ?? '')
   const [
-    username,
-    setUsername
+    newUsername,
+    setNewUsername
   ] = useState<string>(user?.username ?? '')
   const [
     password,
@@ -38,13 +59,14 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
     setNewPassword
   ] = useState<string>('')
   const [
-    confirmNewPassword,
-    setConfirmNewPassword
+    confirmPassword,
+    setConfirmPassword
   ] = useState<string>('')
   const [
     loading,
     setLoading
   ] = useState<boolean>(false)
+  const navigate: NavigateFunction = useNavigate()
   const handleSubmit: Function = async (): Promise<void> => {
     setLoading(true)
     const patch: FormData = new FormData()
@@ -60,9 +82,9 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
       'email',
       email
     )
-    username !== user?.username && patch.append(
-      'username',
-      username
+    newUsername !== user?.username && patch.append(
+      'newUsername',
+      newUsername
     )
     password !== '' && patch.append(
       'password',
@@ -72,9 +94,9 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
       'newPassword',
       newPassword
     )
-    confirmNewPassword !== '' && patch.append(
-      'confirmNewPassword',
-      confirmNewPassword
+    confirmPassword !== '' && patch.append(
+      'confirmPassword',
+      confirmPassword
     )
     const response: Response = await fetch('/api/auth/user', {
       method: 'PATCH',
@@ -89,11 +111,31 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
       toast.success('Changes saved.')
       setPassword('')
       setNewPassword('')
-      setConfirmNewPassword('')
+      setConfirmPassword('')
     } else {
       toast.error(await response.text())
     }
     setLoading(false)
+  }
+  const handleDelete: Function = async (): Promise<void> => {
+    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone!')) {
+      setLoading(true)
+      const response: Response = await fetch('/api/auth/user', {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      })
+      if (response.ok) {
+        toast.success('Account deleted.')
+        setUser(undefined)
+        setToken(undefined)
+        navigate('/')
+      } else {
+        toast.error(await response.text())
+      }
+      setLoading(false)
+    }
   }
   return (
     <>
@@ -102,6 +144,168 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
           {loading ? 'Processing...' : user?.username} | Invoices
         </title>
       </Helmet>
+      {loading ? (
+        <Loader/>
+      ) : (
+        <FormContainer>
+          <h1>
+            <FaUser/> {user?.username}
+          </h1>
+          <Form action={handleSubmit.bind(null)}>
+            <Form.Group
+              className='my-3'
+              controlId='first_name'
+            >
+              <Form.Label>
+                <FaIdBadge/> First Name
+              </Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter your first name'
+                value={first_name}
+                onChange={(event: ChangeEvent<HTMLInputElement>): void => set_first_name(event.target.value)}
+                disabled={
+                  loading ||
+                  password === ''
+                }
+              />
+            </Form.Group>
+            <Form.Group
+              className='my-3'
+              controlId='last_name'
+            >
+              <Form.Label>
+                <FaIdBadge/> Last Name
+              </Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter your last name'
+                value={last_name}
+                onChange={(event: ChangeEvent<HTMLInputElement>): void => set_last_name(event.target.value)}
+                disabled={
+                  loading ||
+                  password === ''
+                }
+              />
+            </Form.Group>
+            <Form.Group
+              className='my-3'
+              controlId='email'
+            >
+              <Form.Label>
+                <FaEnvelope/> Email Address
+              </Form.Label>
+              <Form.Control
+                type='email'
+                placeholder='Enter email'
+                value={email}
+                onChange={(event: ChangeEvent<HTMLInputElement>): void => setEmail(event.target.value)}
+                disabled={
+                  loading ||
+                  password === ''
+                }
+              />
+            </Form.Group>
+            <Form.Group
+              className='my-3'
+              controlId='username'
+            >
+              <Form.Label>
+                <FaIdBadge/> Username
+              </Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter username'
+                value={user?.username}
+                onChange={(event: ChangeEvent<HTMLInputElement>): void => setNewUsername(event.target.value)}
+                disabled={
+                  loading ||
+                  password === ''
+                }
+              />
+            </Form.Group>
+            <hr/>
+            <Form.Group
+              className='my-3'
+              controlId='password'
+            >
+              <Form.Label>
+                <FaKey/> Current Password
+              </Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Enter password to make changes'
+                value={password}
+                onChange={(event: ChangeEvent<HTMLInputElement>): void => setPassword(event.target.value)}
+                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                disabled={loading}
+                autoFocus
+              />
+            </Form.Group>
+            <Form.Group
+              className='my-3'
+              controlId='newPassword'
+            >
+              <Form.Label>
+                <FaKey/> New Password
+              </Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Enter new password'
+                value={newPassword}
+                onChange={(event: ChangeEvent<HTMLInputElement>): void => setNewPassword(event.target.value)}
+                disabled={
+                  loading ||
+                  password === ''
+                }
+              />
+            </Form.Group>
+            <Form.Group
+              className='my-3'
+              controlId='confirmPassword'
+            >
+              <Form.Label>
+                <FaCheck/> Confirm New Password
+              </Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Confirm new password'
+                value={confirmPassword}
+                onChange={(event: ChangeEvent<HTMLInputElement>): void => setConfirmPassword(event.target.value)}
+                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                disabled={
+                  loading ||
+                  password === ''
+                }
+              />
+            </Form.Group>
+            <Button
+              type='submit'
+              variant='success'
+              className='p-auto text-white'
+              disabled={
+                loading ||
+                password === '' ||
+                (newPassword !== '' && newPassword !== confirmPassword)
+              }
+            >
+              <FaCheck/> Save Changes
+            </Button>
+            <Button
+              type='button'
+              variant='danger'
+              className='p-auto text-white'
+              onClick={(): void => handleDelete()}
+              disabled={
+                loading ||
+                password === ''
+              }
+            >
+              <FaTimes/> Delete Account
+            </Button>
+          </Form>
+        </FormContainer>
+      )}
     </>
   )
 }
