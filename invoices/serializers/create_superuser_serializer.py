@@ -17,17 +17,16 @@ class CreateSuperuserSerializer(ModelSerializer):
         """
         model = User
         fields = [
+            'first_name',
+            'last_name',
+            'username',
             'email',
             'password',
-            'confirmPassword',
-            'firstName',
-            'lastName'
+            'confirmPassword'
         ]
-        extra_kwargs = {
-            'password': {
-                'write_only': True
-            }
-        }
+        write_only_fields = [
+            'password',
+        ]
     def create(
         self: 'CreateSuperuserSerializer',
         validated_data: object

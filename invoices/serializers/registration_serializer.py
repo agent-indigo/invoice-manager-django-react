@@ -17,18 +17,16 @@ class RegistrationSerializer(ModelSerializer):
         """
         model = User
         fields = [
+            'first_name',
+            'last_name',
             'username',
             'email',
             'password',
-            'confirmPassword',
-            'firstName',
-            'lastName'
+            'confirmPassword'
         ]
-        extra_kwargs = {
-            'password': {
-                'write_only': True
-            }
-        }
+        write_only_fields = [
+            'password',
+        ]
     def create(
         self: 'RegistrationSerializer',
         validated_data: object
@@ -36,7 +34,9 @@ class RegistrationSerializer(ModelSerializer):
         """
         Create a new user.
         """
-        if not User.objects.filter(is_superuser=True).exists():
+        if not User.objects.filter(
+            is_superuser = True
+        ).exists():
             raise ValidationError({
                 'no_superuser': "A superuser must be created first."
             })
