@@ -16,7 +16,7 @@ const ProductionRoute: FunctionComponent = (): ReactElement => {
     <Outlet/>
   ) : (
     <Navigate
-      to='/config/setRootUserPassword'
+      to='/config/createSuperuser'
       replace
     />
   )
