@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib.admin import site
 from django.urls import (
+    URLPattern,
     path,
     include
 )
@@ -23,7 +24,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from .api_views import (
     ConfigStatusApiView,
-    CurrentUserApiView,
+    CurrentUserApiViewSet,
     InvoiceApiViewSet,
     RegistrationApiView
 )
@@ -33,12 +34,17 @@ from .settings import (
     STATIC_ROOT
 )
 from .views import index
-ROUTER = DefaultRouter()
-ROUTER.register(
-    'api/invoices',
+INVOICES_ROUTER: DefaultRouter = DefaultRouter()
+CURRENT_USER_ROUTER: DefaultRouter = DefaultRouter()
+INVOICES_ROUTER.register(
+    '/',
     InvoiceApiViewSet
 )
-urlpatterns = [
+CURRENT_USER_ROUTER.register(
+    '/',
+    CurrentUserApiViewSet
+)
+urlpatterns: list[URLPattern] = [
     path(
         '',
         index
@@ -46,10 +52,6 @@ urlpatterns = [
     path(
         'admin/',
         site.urls
-    ),
-    path(
-        'api/',
-        include(ROUTER.urls)
     ),
     path(
         'api/auth/',
@@ -61,12 +63,16 @@ urlpatterns = [
     ),
     path(
         'api/auth/user',
-        CurrentUserApiView.as_view()
+        include(CURRENT_USER_ROUTER.urls)
     ),
     path(
         'api/config/status',
         ConfigStatusApiView.as_view()
     ),
+    path(
+        'api/invoices',
+        include(INVOICES_ROUTER.urls)
+    )
 ]
 # Serve static files only during development
 if DEBUG is True:

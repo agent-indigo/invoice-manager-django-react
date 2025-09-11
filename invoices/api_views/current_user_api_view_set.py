@@ -3,11 +3,11 @@ API View for retrieving the currently logged in user.
 """
 from urllib.request import Request
 from django.contrib.auth.models import User
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ..serializers import UserSerializer
-class CurrentUserApiView(RetrieveUpdateAPIView):
+class CurrentUserApiViewSet(ModelViewSet):
     """
     API view for retrieving the currently logged in user.
     """
@@ -15,13 +15,13 @@ class CurrentUserApiView(RetrieveUpdateAPIView):
         IsAuthenticated,
     ]
     serializer_class = UserSerializer
-    def get_object(self: 'CurrentUserApiView') -> User:
+    def get_object(self: 'CurrentUserApiViewSet') -> User:
         """
         Get the currently logged in user.
         """
         return self.request.user
     def partial_update(
-            self: 'CurrentUserApiView',
+            self: 'CurrentUserApiViewSet',
             request: Request,
             *args: tuple[str],
             **kwargs: dict[
@@ -42,3 +42,11 @@ class CurrentUserApiView(RetrieveUpdateAPIView):
         )
         self.perform_update(serializer)
         return Response(serializer.data)
+    def perform_destroy(
+        self: 'CurrentUserApiViewSet',
+        instance: User
+    ):
+        """
+        Delete the currently logged in user.
+        """
+        instance.delete()
