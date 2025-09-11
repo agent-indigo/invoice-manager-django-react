@@ -1,11 +1,11 @@
 export default interface Invoice {
   id: string
   vendor: string
-  subtotal: number
-  hst: number
-  total: number
+  subtotal: string
+  hst: string
+  total: string
   invoice_id: string
-  date: Date
+  date: string
   user_id: number
   created_at: Date
   updated_at: Date
