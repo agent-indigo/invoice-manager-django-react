@@ -22,9 +22,10 @@ import {Helmet} from 'react-helmet'
 import {toast} from 'react-toastify'
 import FormContainer from '../components/FormContainer'
 import Loader from '../components/Loader'
-import ContextProps from '@/types/ContextProps'
 import {useGetContext} from '../components/ContextProvider'
+import ContextProps from '@/types/ContextProps'
 const AddInvoicePage: FunctionComponent = (): ReactElement => {
+  const navigate: NavigateFunction = useNavigate()
   const {
     token,
     invoices,
@@ -39,6 +40,10 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
     setDate
   ] = useState<string>('')
   const [
+    invoiceId,
+    setInvoiceID
+  ] = useState<string>('')
+  const [
     subtotal,
     setSubtotal
   ] = useState<string>('')
@@ -51,15 +56,10 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
     setTotal
   ] = useState<string>('')
   const [
-    invoiceId,
-    setInvoiceID
-  ] = useState<string>('')
-  const [
     loading,
     setLoading
   ] = useState<boolean>(false)
-  const navigate: NavigateFunction = useNavigate()
-  const submitHandler: Function = async (): Promise<void> => {
+  const handleSubmit: Function = async (): Promise<void> => {
     setLoading(true)
     const response: Response = await fetch(
       '/api/invoices', {
@@ -67,14 +67,14 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
         body: JSON.stringify({
           vendor,
           date,
+          invoiceId,
           subtotal,
           hst,
-          total,
-          invoiceId
+          total
         }),
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Token ${token}`
+          Authorization: `Token ${token}`,
+          'Content-Type': 'application/json'
         }
       }
     )
@@ -83,13 +83,14 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
         ...invoices,
         await response.json()
       ])
-      navigate('/invoices/list')
+      navigate('/invoices')
       toast.success('Invoice added.')
     } else {
       toast.error(await response.text())
     }
     setLoading(false)
   }
+  const handleEnterKey: Function = async (event: KeyboardEvent<HTMLInputElement>): Promise<void> => event.key === 'Enter' && await handleSubmit()
   return (
     <>
       <Helmet>
@@ -105,7 +106,7 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
             <FaFileInvoiceDollar/> Add invoice
           </h1>
           <Form
-            action={submitHandler.bind(null)}
+            action={handleSubmit.bind(null)}
             className='py-1'
           >
             <Form.Group
@@ -119,7 +120,7 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
                 type='text'
                 value={vendor}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setVendor(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && submitHandler()}
+                onKeyDown={handleEnterKey.bind(null)}
                 autoFocus
               />
             </Form.Group>
@@ -134,7 +135,7 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
                 type='date'
                 value={date}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setDate(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && submitHandler()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Form.Group
@@ -148,7 +149,7 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
                 type='text'
                 value={invoiceId}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setInvoiceID(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && submitHandler()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Form.Group
@@ -163,7 +164,7 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
                 step='any'
                 value={subtotal}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setSubtotal(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && submitHandler()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Form.Group
@@ -178,7 +179,7 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
                 step='any'
                 value={hst}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setHST(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && submitHandler()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Form.Group
@@ -193,7 +194,7 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
                 step='any'
                 value={total}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setTotal(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && submitHandler()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Button
@@ -202,21 +203,22 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
               className='p-auto text-white'
               disabled={
                 loading ||
-                !vendor ||
-                !date ||
-                !invoiceId ||
-                !subtotal ||
-                !hst ||
-                !total
+                vendor === '' ||
+                date === '' ||
+                invoiceId === '' ||
+                subtotal === '' ||
+                hst === '' ||
+                total === ''
               }
             >
               <FaCheck/> Save
-            </Button> <Button
+            </Button>
+            <Button
               type='button'
               variant='danger'
               className='p-auto text-white'
               disabled={loading}
-              onClick={(): void => navigate('/invoices/list')}
+              onClick={(): void => navigate('/invoices')}
             >
               <FaTimes/> Cancel
             </Button>

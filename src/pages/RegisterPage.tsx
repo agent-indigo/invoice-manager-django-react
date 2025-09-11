@@ -13,7 +13,6 @@ import {
   Form,
   Button
 } from 'react-bootstrap'
-import {Helmet} from 'react-helmet'
 import {
   FaKey,
   FaCheck,
@@ -21,12 +20,15 @@ import {
   FaEnvelope,
   FaUserPlus
 } from 'react-icons/fa'
+import {Helmet} from 'react-helmet'
 import {toast} from 'react-toastify'
 import FormContainer from '../components/FormContainer'
 import Loader from '../components/Loader'
 import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
 const RegisterPage: FunctionComponent = (): ReactElement => {
+  const {setUser}: ContextProps = useGetContext()
+  const navigate: NavigateFunction = useNavigate()
   const [
     first_name,
     set_first_name
@@ -55,9 +57,7 @@ const RegisterPage: FunctionComponent = (): ReactElement => {
     loading,
     setLoading
   ] = useState<boolean>(false)
-  const {setUser}: ContextProps = useGetContext()
-  const navigate: NavigateFunction = useNavigate()
-  const submitHandler: Function = async (): Promise<void> => {
+  const handleSubmit: Function = async (): Promise<void> => {
     setLoading(true)
     const response: Response = await fetch(
       '/api/auth/register', {
@@ -97,7 +97,7 @@ const RegisterPage: FunctionComponent = (): ReactElement => {
           <h1>
             <FaUserPlus/> Register
           </h1>
-          <Form action={submitHandler.bind(null)}>
+          <Form action={handleSubmit.bind(null)}>
             <Form.Group
               controlId='first_name'
               className='my-3'
@@ -181,14 +181,19 @@ const RegisterPage: FunctionComponent = (): ReactElement => {
                 placeholder='Confirm password'
                 value={confirmPassword}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setConfirmPassword(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && submitHandler()}
+                onKeyDown={async (event: KeyboardEvent<HTMLInputElement>): Promise<void> => event.key === 'Enter' && await handleSubmit()}
               />
             </Form.Group>
             <Button
               type='submit'
               variant='success'
               className='p-auto text-white'
-              disabled={loading || !password || !confirmPassword}
+              disabled={
+                loading ||
+                password === '' ||
+                confirmPassword === '' ||
+                password !== confirmPassword
+              }
             >
               <FaCheck/> Confirm
             </Button>

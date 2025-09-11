@@ -30,18 +30,22 @@ import FormContainer from '../components/FormContainer'
 const EditInvoicePage: FunctionComponent = (): ReactElement => {
   const {id}: Partial<Invoice> = useParams<Record<string, string>>()
   const navigate: NavigateFunction = useNavigate()
-  const {token}: ContextProps = useGetContext()
+  const {
+    token,
+    invoices,
+    setInvoices
+  }: ContextProps = useGetContext()
   const [
     invoice,
     setInvoice
   ] = useState<Invoice>({
     id: '',
     vendor: '',
+    invoice_id: '',
+    date: '',
     subtotal: '',
     hst: '',
     total: '',
-    invoice_id: '',
-    date: '',
     user_id: 0,
     created_at: new Date(),
     updated_at: new Date()
@@ -50,6 +54,14 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
     vendor,
     setVendor
   ] = useState<string>(invoice.vendor)
+  const [
+    date,
+    setDate
+  ] = useState<string>(invoice.date)
+  const [
+    invoice_id,
+    set_invoice_id
+  ] = useState<string>(invoice.invoice_id)
   const [
     subtotal,
     setSubtotal
@@ -62,14 +74,6 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
     total,
     setTotal
   ] = useState<string>(invoice.total)
-  const [
-    invoice_id,
-    set_invoice_id
-  ] = useState<string>(invoice.invoice_id)
-  const [
-    date,
-    setDate
-  ] = useState<string>(invoice.date)
   const [
     loading,
     setLoading
@@ -125,7 +129,12 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
       }
     })
     if (response.ok) {
-      setInvoice(await response.json())
+      const invoice: Invoice = await response.json()
+      setInvoice(invoice)
+      setInvoices([
+        ...invoices.filter((invoice: Invoice): boolean => id !== invoice.id),
+        invoice
+      ])
       toast.success('Changes saved.')
     } else {
       toast.error(await response.text())
@@ -151,6 +160,7 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
       setLoading(false)
     }
   }
+  const handleEnterKey: Function = async (event: KeyboardEvent<HTMLInputElement>): Promise<void> => event.key === 'Enter' && await handleSubmit()
   return (
     <>
       <Helmet>
@@ -177,7 +187,7 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
                 type='text'
                 value={vendor}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setVendor(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                onKeyDown={handleEnterKey.bind(null)}
                 autoFocus
               />
             </Form.Group>
@@ -192,7 +202,7 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
                 type='date'
                 value={date}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setDate(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Form.Group
@@ -206,7 +216,7 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
                 type='text'
                 value={invoice_id}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => set_invoice_id(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Form.Group
@@ -220,7 +230,7 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
                 type='number'
                 value={subtotal}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setSubtotal(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Form.Group
@@ -235,7 +245,7 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
                 step='any'
                 value={hst}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setHst(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Form.Group
@@ -250,7 +260,7 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
                 step='any'
                 value={total}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setTotal(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                onKeyDown={handleEnterKey.bind(null)}
               />
             </Form.Group>
             <Button
@@ -259,12 +269,12 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
               className='p-auto text-white'
               disabled={
                 loading ||
-                !vendor ||
-                !date ||
-                !invoice_id ||
-                !subtotal ||
-                !hst ||
-                !total
+                vendor === '' ||
+                date === '' ||
+                invoice_id === '' ||
+                subtotal === '' ||
+                hst === '' ||
+                total === ''
               }
             >
               <FaCheck/> Save
@@ -283,7 +293,7 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
               variant='danger'
               className='p-auto text-white'
               disabled={loading}
-              onClick={(): void => handleDelete()}
+              onClick={handleDelete.bind(null)}
             >
               <FaTimes/> Delete
             </Button>

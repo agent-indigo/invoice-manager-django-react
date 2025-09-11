@@ -13,13 +13,13 @@ import {
   Form,
   Button
 } from 'react-bootstrap'
-import {Helmet} from 'react-helmet'
 import {
   FaKey,
   FaArrowRight,
   FaUser,
   FaUserTag
 } from 'react-icons/fa'
+import {Helmet} from 'react-helmet'
 import {toast} from 'react-toastify'
 import FormContainer from '../components/FormContainer'
 import Loader from '../components/Loader'
@@ -40,7 +40,7 @@ const LoginPage: FunctionComponent = (): ReactElement => {
     loading,
     setLoading
   ] = useState<boolean>(false)
-  const submitHandler: Function = async (): Promise<void> => {
+  const handleSubmit: Function = async (): Promise<void> => {
     setLoading(true)
     const response: Response = await fetch(
       '/api/auth/login', {
@@ -76,7 +76,7 @@ const LoginPage: FunctionComponent = (): ReactElement => {
           <h1>
             <FaUser/> Log in
           </h1>
-          <Form action={submitHandler.bind(null)}>
+          <Form action={handleSubmit.bind(null)}>
             <Form.Group
               controlId='name'
               className='my-3'
@@ -104,14 +104,18 @@ const LoginPage: FunctionComponent = (): ReactElement => {
                 placeholder='Enter password'
                 value={password}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setPassword(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && submitHandler()}
+                onKeyDown={async (event: KeyboardEvent<HTMLInputElement>): Promise<void> => event.key === 'Enter' && await handleSubmit()}
               />
             </Form.Group>
             <Button
               type='submit'
               variant='success'
               className='p-auto text-white'
-              disabled={loading || !username || !password}
+              disabled={
+                loading ||
+                username === '' ||
+                password === ''
+              }
             >
               Log in <FaArrowRight/>
             </Button>

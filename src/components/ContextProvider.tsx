@@ -59,17 +59,8 @@ const ContextProvider: FunctionComponent<PropsWithChildren> = ({children}): Reac
         setUser(undefined)
       }
     }
-    const getInvoices: Function = async (): Promise<void> => {
-      const response: Response = await fetch('/api/invoices')
-      if (response.ok) {
-        setInvoices(await response.json())
-      } else {
-        toast.error(await response.text())
-      }
-    }
     await getConfigStatus()
     configStatus.rootExists && await getUser()
-    user && token && token !== '' && await getInvoices()
   })()})
   return (
     <AppContext.Provider value={{

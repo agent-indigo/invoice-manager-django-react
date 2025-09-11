@@ -37,6 +37,7 @@ import ContextProps from '@/types/ContextProps'
 import SortCriteria from '@/types/SortCriteria'
 import Invoice from '@/types/Invoice'
 const InvoicesListPage: FunctionComponent = (): ReactElement => {
+  const navigate: NavigateFunction = useNavigate()
   const {
     token,
     invoices,
@@ -58,7 +59,7 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
     error,
     setError
   ] = useState<string>('')
-  const deleteHandler: Function = async (id: string): Promise<void> => {
+  const handleDelete: Function = async (id: string): Promise<void> => {
     setDeleting(true)
     const response: Response = await fetch(
       `/api/invoices/${id}`, {
@@ -76,7 +77,6 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
     }
     setDeleting(false)
   }
-  const navigate: NavigateFunction = useNavigate()
   const [
     searchTerm,
     setSearchTerm
@@ -104,8 +104,8 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
     order
   })
   const floatify: Function = (value: number): string => (Math.round(value * 100) / 100).toFixed(2)
-  const bulkDeleteHandler: Function = async (): Promise<void> => {
-    await Promise.all(selectedInvoices.map(async (id: string): Promise<void> => await deleteHandler(id)))
+  const handleBulkDelete: Function = async (): Promise<void> => {
+    await Promise.all(selectedInvoices.map(async (id: string): Promise<void> => await handleDelete(id)))
     setSelectedInvoices([])
     toast.success('Invoices deleted.')
   }
@@ -131,7 +131,7 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
     invoice.invoice_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     new Date(invoice.date).toLocaleDateString() === searchDate
   ))
-  const checkAllHandler: ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>): void => (
+  const handleCheckAll: ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>): void => (
     event.target.checked
     ? setSelectedInvoices(invoices.map((invoice: Invoice): string => invoice.id))
     : setSelectedInvoices([])
@@ -204,7 +204,7 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
                 type='button'
                 variant='danger'
                 disabled={selectedInvoices.length === 0}
-                onClick={async (): Promise<void> => await bulkDeleteHandler()}
+                onClick={async (): Promise<void> => await handleBulkDelete()}
               >
                 <FaTrash/> Delete selected
               </Button>
@@ -225,7 +225,7 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
                       filteredInvoices.length > 0 &&
                       filteredInvoices.length === selectedInvoices.length
                     }
-                    onChange={(event: ChangeEvent<HTMLInputElement>): void => checkAllHandler(event)}
+                    onChange={(event: ChangeEvent<HTMLInputElement>): void => handleCheckAll(event)}
                   />
                 </th>
                 <th>
@@ -473,7 +473,7 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
                       variant='danger'
                       className='p-auto text-white'
                       disabled={deleting}
-                      onClick={async (): Promise<void> => await deleteHandler(invoice.id)}
+                      onClick={async (): Promise<void> => await handleDelete(invoice.id)}
                     >
                       <FaTrash/> Delete
                     </Button>

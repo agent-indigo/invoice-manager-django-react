@@ -9,8 +9,6 @@ import {
   NavigateFunction,
   useNavigate
 } from 'react-router-dom'
-import {Helmet} from 'react-helmet'
-import {toast} from 'react-toastify'
 import {
   FaKey,
   FaCheck,
@@ -23,11 +21,14 @@ import {
   Form,
   Button
 } from 'react-bootstrap'
-import ContextProps from '@/types/ContextProps'
+import {Helmet} from 'react-helmet'
+import {toast} from 'react-toastify'
 import {useGetContext} from '../components/ContextProvider'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
+import ContextProps from '@/types/ContextProps'
 const CurrentUserPage: FunctionComponent = (): ReactElement => {
+  const navigate: NavigateFunction = useNavigate()
   const {
     user,
     setUser,
@@ -66,7 +67,6 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
     loading,
     setLoading
   ] = useState<boolean>(false)
-  const navigate: NavigateFunction = useNavigate()
   const handleSubmit: Function = async (): Promise<void> => {
     setLoading(true)
     const patch: FormData = new FormData()
@@ -117,6 +117,9 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
     }
     setLoading(false)
   }
+  const handleEnterKey: Function = async (event: KeyboardEvent<HTMLInputElement>): Promise<void> => {
+    if (event.key === 'Enter') password === '' ? toast.error('Your current password is needed to make changes.') : newPassword === '' ? await handleSubmit() : newPassword === confirmPassword ? await handleSubmit() : toast.error('New passwords do not match.')
+  }
   const handleDelete: Function = async (): Promise<void> => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone!')) {
       setLoading(true)
@@ -164,10 +167,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
                 placeholder='Enter your first name'
                 value={first_name}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => set_first_name(event.target.value)}
-                disabled={
-                  loading ||
-                  password === ''
-                }
+                disabled={loading}
               />
             </Form.Group>
             <Form.Group
@@ -182,10 +182,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
                 placeholder='Enter your last name'
                 value={last_name}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => set_last_name(event.target.value)}
-                disabled={
-                  loading ||
-                  password === ''
-                }
+                disabled={loading}
               />
             </Form.Group>
             <Form.Group
@@ -200,10 +197,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
                 placeholder='Enter email'
                 value={email}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setEmail(event.target.value)}
-                disabled={
-                  loading ||
-                  password === ''
-                }
+                disabled={loading}
               />
             </Form.Group>
             <Form.Group
@@ -218,10 +212,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
                 placeholder='Enter username'
                 value={user?.username}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setNewUsername(event.target.value)}
-                disabled={
-                  loading ||
-                  password === ''
-                }
+                disabled={loading}
               />
             </Form.Group>
             <hr/>
@@ -237,7 +228,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
                 placeholder='Enter password to make changes'
                 value={password}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setPassword(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
+                onKeyDown={handleEnterKey.bind(null)}
                 disabled={loading}
                 autoFocus
               />
@@ -254,10 +245,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
                 placeholder='Enter new password'
                 value={newPassword}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setNewPassword(event.target.value)}
-                disabled={
-                  loading ||
-                  password === ''
-                }
+                disabled={loading}
               />
             </Form.Group>
             <Form.Group
@@ -272,11 +260,8 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
                 placeholder='Confirm new password'
                 value={confirmPassword}
                 onChange={(event: ChangeEvent<HTMLInputElement>): void => setConfirmPassword(event.target.value)}
-                onKeyDown={(event: KeyboardEvent<HTMLInputElement>): void => event.key === 'Enter' && handleSubmit()}
-                disabled={
-                  loading ||
-                  password === ''
-                }
+                onKeyDown={handleEnterKey.bind(null)}
+                disabled={loading}
               />
             </Form.Group>
             <Button
@@ -304,7 +289,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
               type='button'
               variant='danger'
               className='p-auto text-white'
-              onClick={(): void => handleDelete()}
+              onClick={handleDelete.bind(null)}
               disabled={
                 loading ||
                 password === ''

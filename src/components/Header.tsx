@@ -26,10 +26,11 @@ const Header: FunctionComponent = (): ReactElement => {
     user,
     token,
     setUser,
+    setToken,
     setInvoices
   }: ContextProps = useGetContext()
   const navigate: NavigateFunction = useNavigate()
-  const logoutHandler: Function = async (): Promise<void> => {
+  const handleLogout: Function = async (): Promise<void> => {
     const response: Response = await fetch('/api/auth/logout', {
       headers: {
         'Authorization': `Token ${token}`
@@ -37,6 +38,7 @@ const Header: FunctionComponent = (): ReactElement => {
     })
     if (response.ok) {
       setUser(undefined)
+      setToken(undefined)
       setInvoices([])
       navigate('/')
       toast.success('Logged out.')
@@ -76,7 +78,7 @@ const Header: FunctionComponent = (): ReactElement => {
                     type='button'
                     variant='primary'
                     className='p-auto text-white'
-                    onClick={(): void => logoutHandler()}
+                    onClick={handleLogout.bind(null)}
                   >
                     <FaArrowLeft/> Log out
                   </Button>
