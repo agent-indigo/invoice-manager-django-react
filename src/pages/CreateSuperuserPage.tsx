@@ -64,7 +64,7 @@ const CreateSuperuserPage: FunctionComponent = (): ReactElement => {
   const submitHandler: Function = async (): Promise<void> => {
     setLoading(true)
     const response: Response = await fetch(
-      '/api/config/createSuperuser', {
+      '/api/register', {
         method: 'POST',
         body: JSON.stringify({
           first_name,
@@ -94,7 +94,7 @@ const CreateSuperuserPage: FunctionComponent = (): ReactElement => {
     <>
       <Helmet>
         <title>
-          {loading ? 'Processing...' : 'Setup'} | Invoices
+          {loading ? 'Processing...' : 'Create Superuser | Setup'} | Invoices
         </title>
       </Helmet>
       {loading ? (

@@ -36,7 +36,6 @@ import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
 import SortCriteria from '@/types/SortCriteria'
 import Invoice from '@/types/Invoice'
-import Data from '@/types/Data'
 const InvoicesListPage: FunctionComponent = (): ReactElement => {
   const {
     token,
@@ -98,7 +97,7 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
     order: 'asc'
   })
   const sortHandler: Function = (
-    field: keyof Data,
+    field: keyof Invoice,
     order: 'asc' | 'desc'
   ): void => setSortCriteria({
     field,

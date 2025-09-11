@@ -87,7 +87,7 @@ const RegisterPage: FunctionComponent = (): ReactElement => {
     <>
       <Helmet>
         <title>
-          {loading ? 'Processing...' : 'Setup'} | Invoices
+          {loading ? 'Processing...' : 'Register'} | Invoices
         </title>
       </Helmet>
       {loading ? (

@@ -20,14 +20,11 @@ from django.urls import (
     include
 )
 from django.conf.urls.static import static
-from knox import views as knox_views
 from rest_framework.routers import DefaultRouter
 from .api_views import (
     ConfigStatusApiView,
-    CreateSuperuserApiView,
     CurrentUserApiView,
     InvoiceApiViewSet,
-    LogInApiView,
     RegistrationApiView
 )
 from .settings import (
@@ -59,30 +56,17 @@ urlpatterns = [
         include('knox.urls')
     ),
     path(
-        'api/auth/user',
-        CurrentUserApiView.as_view()
-    ),
-    path(
-        'api/auth/login',
-        LogInApiView.as_view()
-    ),
-    path(
-        'api/auth/logout',
-        knox_views.LogoutView.as_view(),
-        name = 'knox_logout'
-    ),
-    path(
         'api/auth/register',
         RegistrationApiView.as_view()
+    ),
+    path(
+        'api/auth/user',
+        CurrentUserApiView.as_view()
     ),
     path(
         'api/config/status',
         ConfigStatusApiView.as_view()
     ),
-    path(
-        'api/config/createSuperuser',
-        CreateSuperuserApiView.as_view()
-    )
 ]
 # Serve static files only during development
 if DEBUG is True:

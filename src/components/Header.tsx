@@ -10,7 +10,6 @@ import {
 } from 'react-bootstrap'
 import {
   FaUser,
-  FaKey,
   FaArrowLeft,
   FaFileInvoiceDollar
 } from 'react-icons/fa'
@@ -64,16 +63,13 @@ const Header: FunctionComponent = (): ReactElement => {
               <Navbar.Toggle aria-controls='basic-navbar-nav'/>
               <Navbar.Collapse id='basic-navbar-nav'>
                 <Nav className='ms-auto'>
-                  <Navbar.Brand className='text-white'>
-                    <FaUser/> {user?.username}
-                  </Navbar.Brand>
                   <Button
                     type='button'
                     variant='primary'
                     className='p-auto text-white'
-                    onClick={(): void => navigate('/auth/changePassword')}
+                    onClick={(): void => navigate('/user')}
                   >
-                    <FaKey/> Change password
+                    <FaUser/> {user?.username}
                   </Button>
                   <div className="px-1 py-1"/>
                   <Button

@@ -1,5 +1,5 @@
-import Data from '@/types/Data'
+import Invoice from '@/types/Invoice'
 export default interface SortCriteria {
-  field: keyof Data
+  field: keyof Invoice
   order: 'asc' | 'desc'
 }

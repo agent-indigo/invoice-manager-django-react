@@ -23,14 +23,16 @@ import CreateSuperuserPage from './pages/CreateSuperuserPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import CurrentUserPage from './pages/CurrentUserPage'
 import InvoicesListPage from './pages/InvoicesListPage'
 import AddInvoicePage from './pages/AddInvoicePage'
+import EditInvoicePage from './pages/EditInvoicePage'
 import 'bootswatch/dist/united/bootstrap.css'
 import 'react-toastify/dist/ReactToastify.css'
 const App: FunctionComponent = (): ReactElement => (
   <ContextProvider>
     <BrowserRouter>
-    <Header/>
+      <Header/>
       <main className="py-3">
         <Container>
           <Routes>
@@ -61,20 +63,24 @@ const App: FunctionComponent = (): ReactElement => (
                 element={<PrivateRoute/>}
               >
                 <Route
-                  path='logout'
-                  element={<HomePage/>}
+                  path='user'
+                  element={<CurrentUserPage/>}
                 />
                 <Route
                   path='invoices/'
                   element={<Outlet/>}
                 >
                   <Route
-                    path='list'
+                    path=''
                     element={<InvoicesListPage/>}
                   />
                   <Route
                     path='add'
                     element={<AddInvoicePage/>}
+                  />
+                  <Route
+                    path=':id'
+                    element={<EditInvoicePage/>}
                   />
                 </Route>
                 <Route

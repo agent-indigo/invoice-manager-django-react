@@ -5,15 +5,12 @@ from urllib.request import Request
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from knox.models import AuthToken
-from ..serializers import (
-    RegistrationSerializer,
-    UserSerializer
-)
+from ..serializers import UserSerializer
 class RegistrationApiView(GenericAPIView):
     """
     Registration API View
     """
-    serializer_class = RegistrationSerializer
+    serializer_class = UserSerializer
     def post(
         self: 'RegistrationApiView',
         request: Request
