@@ -34,7 +34,7 @@ const webpackConfig: Configuration = {
   output: {
     path: path.resolve(
       __dirname,
-      'nomad/static'
+      'invoices/static'
     ),
     filename: 'app.js'
   },
