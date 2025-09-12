@@ -8,7 +8,7 @@ class Invoice(models.Model):
     """
     Invoice SQL table model
     """
-    class Mets:
+    class Meta:
         """
         Invoice SQL table model meta class
         """
