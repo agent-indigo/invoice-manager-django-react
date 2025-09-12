@@ -12,7 +12,7 @@ class CurrentUserApiViewSet(ModelViewSet):
     API view for retrieving the currently logged in user.
     """
     permission_classes = [
-        IsAuthenticated,
+        IsAuthenticated
     ]
     serializer_class = UserSerializer
     def get_object(self):

@@ -11,7 +11,7 @@ class ConfigStatusApiView(RetrieveAPIView):
     API View for checking if the system is configured (i.e., if a superuser exists).
     """
     permission_classes = [
-        AllowAny,
+        AllowAny
     ]
     serializer_class = UserSerializer
     def get_object(self):

@@ -1,6 +1,7 @@
 """
 Invoice API view set
 """
+# pylint: disable = no-member
 from urllib.request import Request
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -11,17 +12,15 @@ class InvoiceApiViewSet(ModelViewSet):
     """
     Invoice API view set
     """
-    # pylint: disable = no-member
     queryset = Invoice.objects.none()
     serializer_class = InvoiceSerializer
     permission_classes = [
-        IsAuthenticated,
+        IsAuthenticated
     ]
     def get_object(self):
         """
         Get a single invoice
         """
-        # pylint: disable = no-member
         return Invoice.objects.get(
             id = self.kwargs.get('pk'),
             user_id = self.request.user.id
@@ -30,7 +29,6 @@ class InvoiceApiViewSet(ModelViewSet):
         """
         Get all invoices owned by the currently logged in user
         """
-        # pylint: disable = no-member
         return Invoice.objects.filter(
             user_id = self.request.user.id
         )
