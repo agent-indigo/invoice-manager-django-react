@@ -42,7 +42,7 @@ INVOICES_ROUTER.register(
 CURRENT_USER_ROUTER.register(
     '',
     CurrentUserApiViewSet,
-    basename = 'user'
+    'user'
 )
 urlpatterns = [
     path(
