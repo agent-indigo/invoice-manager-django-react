@@ -25,7 +25,7 @@ class InvoiceAdminConfig(ModelAdmin):
         'updated_at'
     ]
     list_display_links = [
-        'invoice_id'
+        'invoice_id',
     ]
     list_filter = [
         'vendor',

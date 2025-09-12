@@ -15,7 +15,7 @@ class InvoiceApiViewSet(ModelViewSet):
     queryset = Invoice.objects.none()
     serializer_class = InvoiceSerializer
     permission_classes = [
-        IsAuthenticated
+        IsAuthenticated,
     ]
     def get_object(self):
         """

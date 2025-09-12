@@ -27,7 +27,7 @@ class UserSerializer(ModelSerializer):
             'newPassword',
             'confirmPassword',
             'is_superuser',
-            'is_staff'
+            'is_staff',
             'date_joined',
             'last_login'
         ]
