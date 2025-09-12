@@ -36,12 +36,13 @@ from .views import index
 INVOICES_ROUTER = DefaultRouter()
 CURRENT_USER_ROUTER = DefaultRouter()
 INVOICES_ROUTER.register(
-    '/',
+    '',
     InvoiceApiViewSet
 )
 CURRENT_USER_ROUTER.register(
-    '/',
-    CurrentUserApiViewSet
+    '',
+    CurrentUserApiViewSet,
+    basename = 'user'
 )
 urlpatterns = [
     path(
