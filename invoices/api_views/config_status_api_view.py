@@ -14,7 +14,7 @@ class ConfigStatusApiView(RetrieveAPIView):
         AllowAny,
     ]
     serializer_class = UserSerializer
-    def get_object(self: 'ConfigStatusApiView') -> Response:
+    def get_object(self):
         """
         Return the config status.
         """

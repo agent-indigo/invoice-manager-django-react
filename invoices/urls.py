@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib.admin import site
 from django.urls import (
-    URLPattern,
     path,
     include
 )
@@ -34,8 +33,8 @@ from .settings import (
     STATIC_ROOT
 )
 from .views import index
-INVOICES_ROUTER: DefaultRouter = DefaultRouter()
-CURRENT_USER_ROUTER: DefaultRouter = DefaultRouter()
+INVOICES_ROUTER = DefaultRouter()
+CURRENT_USER_ROUTER = DefaultRouter()
 INVOICES_ROUTER.register(
     '/',
     InvoiceApiViewSet
@@ -44,7 +43,7 @@ CURRENT_USER_ROUTER.register(
     '/',
     CurrentUserApiViewSet
 )
-urlpatterns: list[URLPattern] = [
+urlpatterns = [
     path(
         '',
         index

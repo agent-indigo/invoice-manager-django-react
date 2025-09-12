@@ -15,20 +15,17 @@ class CurrentUserApiViewSet(ModelViewSet):
         IsAuthenticated,
     ]
     serializer_class = UserSerializer
-    def get_object(self: 'CurrentUserApiViewSet') -> User:
+    def get_object(self):
         """
         Get the currently logged in user.
         """
         return self.request.user
     def partial_update(
-            self: 'CurrentUserApiViewSet',
+            self,
             request: Request,
-            *args: tuple[str],
-            **kwargs: dict[
-                str,
-                str
-            ]
-        ) -> Response:
+            *args,
+            **kwargs
+        ):
         """
         Update the currently logged in user.
         """
@@ -43,7 +40,7 @@ class CurrentUserApiViewSet(ModelViewSet):
         self.perform_update(serializer)
         return Response(serializer.data)
     def perform_destroy(
-        self: 'CurrentUserApiViewSet',
+        self,
         instance: User
     ):
         """

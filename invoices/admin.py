@@ -7,7 +7,6 @@ from django.contrib.admin import (
 )
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.safestring import SafeText
 from .models import Invoice
 # Register your models here
 class InvoiceAdminConfig(ModelAdmin):
@@ -52,9 +51,9 @@ class InvoiceAdminConfig(ModelAdmin):
     ]
     list_per_page = 20
     def user(
-        self: 'InvoiceAdminConfig',
+        self,
         invoice: Invoice
-    ) -> SafeText:
+    ):
         """
         Link to the admin page of the user who added the invoice
         """

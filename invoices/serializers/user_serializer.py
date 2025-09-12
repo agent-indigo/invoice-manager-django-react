@@ -44,41 +44,14 @@ class UserSerializer(ModelSerializer):
             'newPassword',
             'confirmPassword'
         ]
-        def create(
-            self: 'UserSerializer',
-            validated_data: object
-        ) -> User:
-            """
-            Create a new user
-            """
-            if User.objects.filter(
-                username = validated_data['username']
-            ).exists():
-                raise ValidationError({
-                    'username': "A user with this username already exists."
-                })
-            if validated_data['password'] != validated_data['confirmPassword']:
-                raise ValidationError({
-                    'password': "Passwords do not match."
-                })
-            validated_data.pop('confirmPassword')
-            if User.objects.filter(
-                is_superuser = True
-            ).exists():
-                return User.objects.create_user(
-                    **validated_data
-                )
-            return User.objects.create_superuser(
-                **validated_data
-            )
     def validate(
-        self: 'UserSerializer',
-        attrs: object
-    ) -> User:
+        self,
+        attrs: dict
+    ):
         """
         Validate a user's credentials
         """
-        user: User | None = authenticate(
+        user = authenticate(
             username = attrs.get('username'),
             password = attrs.get('password')
         )
@@ -91,11 +64,38 @@ class UserSerializer(ModelSerializer):
                 'username': "User is disabled."
             })
         return user
+    def create(
+        self,
+        validated_data: dict
+    ):
+        """
+        Create a new user
+        """
+        if User.objects.filter(
+            username = validated_data.get('username')
+        ).exists():
+            raise ValidationError({
+                'username': "A user with this username already exists."
+            })
+        if validated_data.get('password') != validated_data.get('confirmPassword'):
+            raise ValidationError({
+                'password': "Passwords do not match."
+            })
+        validated_data.pop('confirmPassword')
+        if User.objects.filter(
+            is_superuser = True
+        ).exists():
+            return User.objects.create_user(
+                **validated_data
+            )
+        return User.objects.create_superuser(
+            **validated_data
+        )
     def partial_update(
-        self: 'UserSerializer',
+        self,
         instance: User,
-        validated_data: object
-    ) -> User:
+        validated_data: dict
+    ):
         """
         Edit a user
         """
@@ -105,26 +105,26 @@ class UserSerializer(ModelSerializer):
             })
         if not authenticate(
             username = instance.username,
-            password = validated_data['password']
+            password = validated_data.get('password')
         ):
             raise ValidationError({
                 'password': "Invalid credentials."
             })
         if 'newUsername' in validated_data and validated_data.get('newUsername') != '':
             if User.objects.filter(
-                username = validated_data['newUsername']
+                username = validated_data.get('newUsername')
             ).exists():
                 raise ValidationError({
                     'newUsername': "A user with this username already exists."
                 })
-            instance.username = validated_data['newUsername']
+            instance.username = validated_data.get('newUsername')
             validated_data.pop('newUsername')
         if 'newPassword' in validated_data and validated_data.get('newPassword') != '':
-            if validated_data['newPassword'] != validated_data.get('confirmPassword'):
+            if validated_data.get('newPassword') != validated_data.get('confirmPassword'):
                 raise ValidationError({
                     'newPassword': "Passwords do not match."
                 })
-            instance.set_password(validated_data['newPassword'])
+            instance.set_password(validated_data.get('newPassword'))
             validated_data.pop('newPassword')
             validated_data.pop('confirmPassword')
         for attr, value in validated_data.items():

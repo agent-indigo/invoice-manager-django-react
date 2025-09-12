@@ -12,9 +12,9 @@ class RegistrationApiView(GenericAPIView):
     """
     serializer_class = UserSerializer
     def post(
-        self: 'RegistrationApiView',
+        self,
         request: Request
-    ) -> Response:
+    ):
         """
         Registration request handler
         """

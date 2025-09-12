@@ -2,7 +2,6 @@
 Invoice API view set
 """
 from urllib.request import Request
-from django.db.models import QuerySet
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -18,7 +17,7 @@ class InvoiceApiViewSet(ModelViewSet):
     permission_classes = [
         IsAuthenticated
     ]
-    def get_object(self: 'InvoiceApiViewSet') -> Invoice:
+    def get_object(self):
         """
         Get a single invoice
         """
@@ -27,7 +26,7 @@ class InvoiceApiViewSet(ModelViewSet):
             id = self.kwargs.get('pk'),
             user_id = self.request.user.id
         )
-    def get_queryset(self: 'InvoiceApiViewSet') -> QuerySet[Invoice]:
+    def get_queryset(self):
         """
         Get all invoices owned by the currently logged in user
         """
@@ -36,9 +35,9 @@ class InvoiceApiViewSet(ModelViewSet):
             user_id = self.request.user.id
         )
     def perform_create(
-        self: 'InvoiceApiViewSet',
+        self,
         serializer: InvoiceSerializer
-    ) -> Invoice:
+    ):
         """
         Add an invoice
         """
@@ -46,14 +45,11 @@ class InvoiceApiViewSet(ModelViewSet):
             user_id = self.request.user.id
         )
     def partial_update(
-        self: 'InvoiceApiViewSet',
+        self,
         request: Request,
-        *args: tuple[str],
-        **kwargs: dict[
-            str,
-            str
-        ]
-    ) -> Response:
+        *args,
+        **kwargs
+    ):
         """
         Update an invoice
         """
@@ -68,9 +64,9 @@ class InvoiceApiViewSet(ModelViewSet):
         self.perform_update(serializer)
         return Response(serializer.data)
     def perform_destroy(
-        self: 'InvoiceApiViewSet',
+        self,
         instance: Invoice
-    ) -> None:
+    ):
         """
         Delete an invoice
         """
