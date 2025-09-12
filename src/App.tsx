@@ -84,13 +84,14 @@ const App: FunctionComponent = (): ReactElement => (
                   />
                 </Route>
                 <Route
-                  path='staff'
+                  path='staff/'
                   element={<StaffRoute/>}
-                ></Route>
-                <Route
-                  path='superuser'
-                  element={<SuperuserRoute/>}
-                ></Route>
+                >
+                  <Route
+                    path='superuser/'
+                    element={<SuperuserRoute/>}
+                  ></Route>
+                </Route>
               <Route 
                 path='setup/'
                 element={<Outlet/>}
