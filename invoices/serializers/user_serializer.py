@@ -54,9 +54,11 @@ class UserSerializer(ModelSerializer):
             'date_joined',
             'last_login'
         ]
-        write_only_fields = [
-            'password'
-        ]
+        extra_kwargs = {
+            'password': {
+                'write_only': True
+            }
+        }
     def validate(
         self,
         attrs: dict
