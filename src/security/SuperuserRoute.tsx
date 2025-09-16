@@ -15,7 +15,6 @@ import ContextProps from '@/types/ContextProps'
 const SuperuserRoute: FunctionComponent = (): ReactElement => {
   const {
     user,
-    token,
     setUser
   }: ContextProps = useGetContext()
   const [
@@ -26,6 +25,7 @@ const SuperuserRoute: FunctionComponent = (): ReactElement => {
     errorMessage,
     setErrorMessage
   ] = useState<string>('')
+  const token: string = localStorage.getItem('token') ?? ''
   useEffect((): void => {(async (): Promise<void> => {
     const response: Response = await fetch(
       '/api/auth/user', {
@@ -40,7 +40,10 @@ const SuperuserRoute: FunctionComponent = (): ReactElement => {
       setErrorOccured(true)
       setErrorMessage(await response.text())
     }
-  })()})
+  })()}, [
+    setUser,
+    token
+  ])
   !user?.is_superuser && toast.error('You are not logged in as the superuser.')
   return errorOccured ? (
     <Card

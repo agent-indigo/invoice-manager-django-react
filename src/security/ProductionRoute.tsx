@@ -32,7 +32,9 @@ const ProductionRoute: FunctionComponent = (): ReactElement => {
       setErrorOccurred(true)
       setErrorMessage(await response.text())
     }
-  })()})
+  })()}, [
+    setConfigStatus
+  ])
   return errorOccurred ? (
     <Card
       bg='danger'

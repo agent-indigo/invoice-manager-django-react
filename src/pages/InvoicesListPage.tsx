@@ -38,8 +38,8 @@ import SortCriteria from '@/types/SortCriteria'
 import Invoice from '@/types/Invoice'
 const InvoicesListPage: FunctionComponent = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate()
+  const token: string = localStorage.getItem('token') ?? ''
   const {
-    token,
     invoices,
     setInvoices
   }: ContextProps = useGetContext()

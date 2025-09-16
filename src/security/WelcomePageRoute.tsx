@@ -24,7 +24,10 @@ const WelcomePageRoute: FunctionComponent = (): ReactElement => {
       }
     )
     response.ok && setUser(await response.json())
-  })()})
+  })()}, [
+    setUser,
+    token
+  ])
   return user && token !== '' ? (
     <Navigate
       to='/home'

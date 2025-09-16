@@ -30,8 +30,8 @@ import FormContainer from '../components/FormContainer'
 const EditInvoicePage: FunctionComponent = (): ReactElement => {
   const {id}: Partial<Invoice> = useParams<Record<string, string>>()
   const navigate: NavigateFunction = useNavigate()
+  const token: string = localStorage.getItem('token') ?? ''
   const {
-    token,
     invoices,
     setInvoices
   }: ContextProps = useGetContext()

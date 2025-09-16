@@ -40,7 +40,10 @@ const StaffRoute: FunctionComponent = (): ReactElement => {
       setErrorOccured(true)
       setErrorMessage(await response.text())
     }
-  })()})
+  })()}, [
+    setUser,
+    token
+  ])
   !user?.is_staff && toast.error('You are not logged in as an administrator.')
   return errorOccured ? (
     <Card

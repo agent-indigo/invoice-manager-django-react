@@ -26,8 +26,8 @@ import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
 const AddInvoicePage: FunctionComponent = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate()
+  const token: string = localStorage.getItem('token') ?? ''
   const {
-    token,
     invoices,
     setInvoices
   }: ContextProps = useGetContext()

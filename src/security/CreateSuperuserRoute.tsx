@@ -32,7 +32,9 @@ const CreateSuperuserRoute: FunctionComponent = (): ReactElement => {
       setErrorOccured(true)
       setErrorMessage(await response.text())
     }
-  })()})
+  })()}, [
+    setConfigStatus
+  ])
   return errorOccured ? (
     <Card
       bg='danger'

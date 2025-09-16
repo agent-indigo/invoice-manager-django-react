@@ -24,7 +24,10 @@ const HomePageRoute: FunctionComponent = (): ReactElement => {
       }
     )
     response.ok && setUser(await response.json())
-  })()})
+  })()}, [
+    setUser,
+    token
+  ])
   return user && token !== '' ? (
     <Outlet/>
   ) : (
