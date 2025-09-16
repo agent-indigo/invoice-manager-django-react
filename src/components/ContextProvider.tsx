@@ -13,8 +13,6 @@ import Invoice from '@/types/Invoice'
 import ConfigStatus from '@/types/ConfigStatus'
 const AppContext: Context<ContextProps> = createContext<ContextProps>({
   setUser: (): void => {},
-  token : '',
-  setToken: (): void => {},
   invoices: [],
   setInvoices: (): void => {},
   configStatus: {
@@ -37,16 +35,10 @@ const ContextProvider: FunctionComponent<PropsWithChildren> = ({children}): Reac
   ] = useState<ConfigStatus>({
     rootExists: false
   })
-  const [
-    token,
-    setToken
-  ] = useState<string>('')
   return (
     <AppContext.Provider value={{
       user,
       setUser,
-      token,
-      setToken,
       invoices,
       setInvoices,
       configStatus,

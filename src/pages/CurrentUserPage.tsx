@@ -33,10 +33,9 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
   const {
     user,
     setUser,
-    token,
-    setToken,
     setInvoices
   }: ContextProps = useGetContext()
+  const token: string = localStorage.getItem('token') ?? ''
   const [
     first_name,
     set_first_name
@@ -138,7 +137,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
       if (response.ok) {
         toast.success('Account deleted.')
         setUser(undefined)
-        setToken('')
+        localStorage.removeItem('token')
         setInvoices([])
         navigate('/welcome')
       } else {
@@ -161,7 +160,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
       if (response.ok) {
         toast.success('Logged out from all devices.')
         setUser(undefined)
-        setToken('')
+        localStorage.removeItem('token')
         setInvoices([])
         navigate('/welcome')
       } else {

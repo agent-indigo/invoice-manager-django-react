@@ -24,11 +24,10 @@ import ContextProps from '@/types/ContextProps'
 const Header: FunctionComponent = (): ReactElement => {
   const {
     user,
-    token,
     setUser,
-    setToken,
     setInvoices
   }: ContextProps = useGetContext()
+  const token: string = localStorage.getItem('token') ?? ''
   const navigate: NavigateFunction = useNavigate()
   const handleLogout: Function = async (): Promise<void> => {
     const response: Response = await fetch(
@@ -41,7 +40,7 @@ const Header: FunctionComponent = (): ReactElement => {
     )
     if (response.ok) {
       setUser(undefined)
-      setToken('')
+      localStorage.removeItem('token')
       setInvoices([])
       navigate('/welcome')
       toast.success('Logged out.')

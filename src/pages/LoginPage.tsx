@@ -27,10 +27,7 @@ import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
 import LogInResponse from '@/types/LogInResponse'
 const LoginPage: FunctionComponent = (): ReactElement => {
-  const {
-    setUser,
-    setToken
-  }: ContextProps = useGetContext()
+  const {setUser}: ContextProps = useGetContext()
   const navigate: NavigateFunction = useNavigate()
   const [
     username,
@@ -64,7 +61,10 @@ const LoginPage: FunctionComponent = (): ReactElement => {
         token
       }: LogInResponse = await response.json()
       setUser(user)
-      setToken(token)
+      localStorage.setItem(
+        'token',
+        token
+      )
       navigate('/home')
     } else {
       toast.error(await response.text())
