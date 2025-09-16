@@ -16,7 +16,13 @@ const WelcomePageRoute: FunctionComponent = (): ReactElement => {
     setUser
   }: ContextProps = useGetContext()
   useEffect((): void => {(async (): Promise<void> => {
-    const response: Response = await fetch('/api/auth/user')
+    const response: Response = await fetch(
+      '/api/auth/user', {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }
+    )
     response.ok && setUser(await response.json())
   })()})
   return user && token !== '' ? (
