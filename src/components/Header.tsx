@@ -31,16 +31,19 @@ const Header: FunctionComponent = (): ReactElement => {
   }: ContextProps = useGetContext()
   const navigate: NavigateFunction = useNavigate()
   const handleLogout: Function = async (): Promise<void> => {
-    const response: Response = await fetch('/api/auth/logout', {
-      headers: {
-        'Authorization': `Token ${token}`
+    const response: Response = await fetch(
+      '/api/auth/logout/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Token ${token}`
+        }
       }
-    })
+    )
     if (response.ok) {
       setUser(undefined)
-      setToken(undefined)
+      setToken('')
       setInvoices([])
-      navigate('/')
+      navigate('/welcome')
       toast.success('Logged out.')
     } else {
       toast.error(await response.text())
@@ -55,7 +58,7 @@ const Header: FunctionComponent = (): ReactElement => {
         className='text-center'
       >
         <Container className='justify-content-center'>
-          <LinkContainer to='/'>
+          <LinkContainer to='/home'>
             <Navbar.Brand className='text-white'>
               <FaFileInvoiceDollar/> Invoices
             </Navbar.Brand>

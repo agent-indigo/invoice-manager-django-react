@@ -80,11 +80,13 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
   ] = useState<boolean>(false)
   useEffect((): void => {(async (): Promise<void> => {
     setLoading(true)
-    const response: Response = await fetch(`/api/invoices/${id}`, {
-      headers: {
-        Authorization: `Token ${token}`
+    const response: Response = await fetch(
+      `/api/invoices/${id}`, {
+        headers: {
+          Authorization: `Token ${token}`
+        }
       }
-    })
+    )
     if (response.ok) {
       setInvoice(await response.json())
     } else {
@@ -120,14 +122,16 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
       'date',
       date
     )
-    const response: Response = await fetch(`/api/invoices/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(Object.fromEntries(patch.entries())),
-      headers: {
-        Authorization: `Token ${token}`,
-        'Content-Type': 'application/json'
+    const response: Response = await fetch(
+      `/api/invoices/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(Object.fromEntries(patch.entries())),
+        headers: {
+          Authorization: `Token ${token}`,
+          'Content-Type': 'application/json'
+        }
       }
-    })
+    )
     if (response.ok) {
       const invoice: Invoice = await response.json()
       setInvoice(invoice)
@@ -145,12 +149,14 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
   const handleDelete: Function = async (): Promise<void> => {
     if (window.confirm('Are you sure you want to delete this invoice? This action cannot be undone!')) {
       setLoading(true)
-      const response: Response = await fetch(`/api/invoices/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Token ${token}`
+      const response: Response = await fetch(
+        `/api/invoices/${id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Token ${token}`
+          }
         }
-      })
+      )
       if (response.ok) {
         toast.success('Invoice deleted.')
         navigate('/invoices')

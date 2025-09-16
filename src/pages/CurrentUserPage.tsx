@@ -15,7 +15,8 @@ import {
   FaIdBadge,
   FaEnvelope,
   FaUser,
-  FaTimes
+  FaTimes,
+  FaArrowLeft
 } from 'react-icons/fa'
 import {
   Form,
@@ -33,7 +34,8 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
     user,
     setUser,
     token,
-    setToken
+    setToken,
+    setInvoices
   }: ContextProps = useGetContext()
   const [
     first_name,
@@ -98,14 +100,16 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
       'confirmPassword',
       confirmPassword
     )
-    const response: Response = await fetch('/api/auth/user', {
-      method: 'PATCH',
-      body: JSON.stringify(Object.fromEntries(patch.entries())),
-      headers: {
-        Authorization: `Token ${token}`,
-        'Content-Type': 'application/json'
+    const response: Response = await fetch(
+      '/api/auth/user', {
+        method: 'PATCH',
+        body: JSON.stringify(Object.fromEntries(patch.entries())),
+        headers: {
+          Authorization: `Token ${token}`,
+          'Content-Type': 'application/json'
+        }
       }
-    })
+    )
     if (response.ok) {
       setUser(await response.json())
       toast.success('Changes saved.')
@@ -123,17 +127,43 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
   const handleDelete: Function = async (): Promise<void> => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone!')) {
       setLoading(true)
-      const response: Response = await fetch('/api/auth/user', {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Token ${token}`
+      const response: Response = await fetch(
+        '/api/auth/user', {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Token ${token}`
+          }
         }
-      })
+      )
       if (response.ok) {
         toast.success('Account deleted.')
         setUser(undefined)
-        setToken(undefined)
-        navigate('/')
+        setToken('')
+        setInvoices([])
+        navigate('/welcome')
+      } else {
+        toast.error(await response.text())
+      }
+      setLoading(false)
+    }
+  }
+  const handleLogoutAll: Function = async (): Promise<void> => {
+    if (!window.confirm('Are you sure you want to log out from all devices? This action cannot be undone!')) {
+      setLoading(true)
+      const response: Response = await fetch(
+        '/api/auth/logoutall/', {
+          method: 'POST',
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        }
+      )
+      if (response.ok) {
+        toast.success('Logged out from all devices.')
+        setUser(undefined)
+        setToken('')
+        setInvoices([])
+        navigate('/welcome')
       } else {
         toast.error(await response.text())
       }
@@ -284,6 +314,15 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
               disabled={loading}
             >
               <FaTimes/> Cancel
+            </Button>
+            <Button
+              type='button'
+              variant='warning'
+              className='p-auto text-white'
+              onClick={handleLogoutAll.bind(null)}
+              disabled={loading}
+            >
+              <FaArrowLeft/> Log out from all devices
             </Button>
             <Button
               type='button'

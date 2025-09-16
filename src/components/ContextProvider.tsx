@@ -5,16 +5,15 @@ import {
   PropsWithChildren,
   ReactElement,
   useContext,
-  useEffect,
   useState
 } from 'react'
-import {toast} from 'react-toastify'
 import ContextProps from '@/types/ContextProps'
 import User from '@/types/User'
 import Invoice from '@/types/Invoice'
 import ConfigStatus from '@/types/ConfigStatus'
 const AppContext: Context<ContextProps> = createContext<ContextProps>({
   setUser: (): void => {},
+  token : '',
   setToken: (): void => {},
   invoices: [],
   setInvoices: (): void => {},
@@ -41,27 +40,7 @@ const ContextProvider: FunctionComponent<PropsWithChildren> = ({children}): Reac
   const [
     token,
     setToken
-  ] = useState<string | undefined>(undefined)
-  useEffect((): void => {(async (): Promise<void> => {
-    const getConfigStatus: Function = async (): Promise<void> => {
-      const response: Response = await fetch('/api/config/status')
-      if (response.ok) {
-        setConfigStatus(await response.json())
-      } else {
-        toast.error(await response.text())
-      }
-    }
-    const getUser: Function = async (): Promise<void> => {
-      const response: Response = await fetch('/api/auth/user')
-      if (response.ok) {
-        setUser(await response.json())
-      } else {
-        setUser(undefined)
-      }
-    }
-    await getConfigStatus()
-    configStatus.rootExists && await getUser()
-  })()})
+  ] = useState<string>('')
   return (
     <AppContext.Provider value={{
       user,

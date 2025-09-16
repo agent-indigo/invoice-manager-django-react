@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
-const LoginRoute: FunctionComponent = (): ReactElement => {
+const HomePageRoute: FunctionComponent = (): ReactElement => {
   const {
     user,
     token,
@@ -26,12 +26,12 @@ const LoginRoute: FunctionComponent = (): ReactElement => {
     response.ok && setUser(await response.json())
   })()})
   return user && token !== '' ? (
+    <Outlet/>
+  ) : (
     <Navigate
-      to='/home'
+      to='/welcome'
       replace
     />
-  ) : (
-    <Outlet/>
   )
 }
-export default LoginRoute
+export default HomePageRoute

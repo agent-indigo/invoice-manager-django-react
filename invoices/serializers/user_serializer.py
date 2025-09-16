@@ -2,6 +2,7 @@
 User serializer
 """
 from rest_framework.serializers import (
+    CharField,
     ModelSerializer,
     ValidationError
 )
@@ -11,6 +12,21 @@ class UserSerializer(ModelSerializer):
     """
     User Serializer
     """
+    newUsername = CharField(
+        write_only = True,
+        required = False,
+        allow_blank = True
+    )
+    newPassword = CharField(
+        write_only = True,
+        required = False,
+        allow_blank = True
+    )
+    confirmPassword = CharField(
+        write_only = True,
+        required = False,
+        allow_blank = True
+    )
     class Meta:
         """
         User serializer metadata
@@ -22,10 +38,7 @@ class UserSerializer(ModelSerializer):
             'last_name',
             'email',
             'username',
-            'newUsername',
             'password',
-            'newPassword',
-            'confirmPassword',
             'is_superuser',
             'is_staff',
             'date_joined',
@@ -39,10 +52,7 @@ class UserSerializer(ModelSerializer):
             'last_login'
         ]
         write_only_fields = [
-            'newUsername',
-            'password',
-            'newPassword',
-            'confirmPassword'
+            'password'
         ]
     def validate(
         self,

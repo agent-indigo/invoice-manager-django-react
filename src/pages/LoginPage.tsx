@@ -25,8 +25,12 @@ import FormContainer from '../components/FormContainer'
 import Loader from '../components/Loader'
 import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
+import LogInResponse from '@/types/LogInResponse'
 const LoginPage: FunctionComponent = (): ReactElement => {
-  const {setUser}: ContextProps = useGetContext()
+  const {
+    setUser,
+    setToken
+  }: ContextProps = useGetContext()
   const navigate: NavigateFunction = useNavigate()
   const [
     username,
@@ -43,7 +47,7 @@ const LoginPage: FunctionComponent = (): ReactElement => {
   const handleSubmit: Function = async (): Promise<void> => {
     setLoading(true)
     const response: Response = await fetch(
-      '/api/auth/login', {
+      '/api/auth/login/', {
         method: 'POST',
         body: JSON.stringify({
           username,
@@ -55,8 +59,13 @@ const LoginPage: FunctionComponent = (): ReactElement => {
       }
     )
     if (response.ok) {
-      setUser(await response.json())
-      navigate('/')
+      const {
+        user,
+        token
+      }: LogInResponse = await response.json()
+      setUser(user)
+      setToken(token)
+      navigate('/home')
     } else {
       toast.error(await response.text())
     }

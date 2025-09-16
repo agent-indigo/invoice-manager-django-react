@@ -15,12 +15,15 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import CreateSuperuserRoute from './security/CreateSuperuserRoute'
 import ProductionRoute from './security/ProductionRoute'
+import HomePageRoute from './security/HomePageRoute'
+import WelcomePageRoute from './security/WelcomePageRoute'
 import LoginRoute from './security/LoginRoute'
 import PrivateRoute from './security/PrivateRoute'
 import StaffRoute from './security/StaffRoute'
 import SuperuserRoute from './security/SuperuserRoute'
 import CreateSuperuserPage from './pages/CreateSuperuserPage'
 import HomePage from './pages/HomePage'
+import WelcomePage from './pages/WelcomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import CurrentUserPage from './pages/CurrentUserPage'
@@ -41,10 +44,24 @@ const App: FunctionComponent = (): ReactElement => (
               element={<ProductionRoute/>}
             >
               <Route
-                index={true}
                 path=''
-                element={<HomePage/>}
-              />
+                element={<WelcomePageRoute/>}
+              >
+                <Route
+                  path='welcome'
+                  element={<WelcomePage/>}
+                />
+              </Route>
+              <Route
+                path=''
+                element={<HomePageRoute/>}
+              >
+                <Route
+                  index={true}
+                  path='home'
+                  element={<HomePage/>}
+                />
+              </Route>
               <Route
                 path=''
                 element={<LoginRoute/>}

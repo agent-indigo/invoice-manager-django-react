@@ -9,20 +9,14 @@ import {
 } from 'react-router-dom'
 import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
-const LoginRoute: FunctionComponent = (): ReactElement => {
+const WelcomePageRoute: FunctionComponent = (): ReactElement => {
   const {
     user,
     token,
     setUser
   }: ContextProps = useGetContext()
   useEffect((): void => {(async (): Promise<void> => {
-    const response: Response = await fetch(
-      '/api/auth/user', {
-        headers: {
-          Authorization: `Token ${token}`
-        }
-      }
-    )
+    const response: Response = await fetch('/api/auth/user')
     response.ok && setUser(await response.json())
   })()})
   return user && token !== '' ? (
@@ -34,4 +28,4 @@ const LoginRoute: FunctionComponent = (): ReactElement => {
     <Outlet/>
   )
 }
-export default LoginRoute
+export default WelcomePageRoute
