@@ -151,7 +151,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
     if (!window.confirm('Are you sure you want to log out from all devices? This action cannot be undone!')) {
       setLoading(true)
       const response: Response = await fetch(
-        '/api/auth/logoutall/', {
+        '/api/auth/logoutall', {
           method: 'POST',
           headers: {
             Authorization: `Token ${token}`

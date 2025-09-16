@@ -3,11 +3,11 @@ API View for retrieving the currently logged in user.
 """
 from urllib.request import Request
 from django.contrib.auth.models import User
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ..serializers import UserSerializer
-class CurrentUserApiViewSet(ModelViewSet):
+class CurrentUserApiView(RetrieveUpdateDestroyAPIView):
     """
     API view for retrieving the currently logged in user.
     """

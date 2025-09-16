@@ -47,7 +47,7 @@ const LoginPage: FunctionComponent = (): ReactElement => {
   const handleSubmit: Function = async (): Promise<void> => {
     setLoading(true)
     const response: Response = await fetch(
-      '/api/auth/login/', {
+      '/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({
           username,

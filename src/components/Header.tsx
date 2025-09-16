@@ -32,7 +32,7 @@ const Header: FunctionComponent = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate()
   const handleLogout: Function = async (): Promise<void> => {
     const response: Response = await fetch(
-      '/api/auth/logout/', {
+      '/api/auth/logout', {
         method: 'POST',
         headers: {
           'Authorization': `Token ${token}`

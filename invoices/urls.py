@@ -21,9 +21,14 @@ from django.urls import (
 )
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
+from knox.views import (
+    LogoutView,
+    LogoutAllView
+)
 from .api_views import (
     ConfigStatusApiView,
-    CurrentUserApiViewSet,
+    CurrentUserApiView,
+    LoginApiView,
     InvoiceApiViewSet,
     RegistrationApiView
 )
@@ -34,15 +39,9 @@ from .settings import (
 )
 from .views import index
 INVOICES_ROUTER = DefaultRouter()
-CURRENT_USER_ROUTER = DefaultRouter()
 INVOICES_ROUTER.register(
     '',
     InvoiceApiViewSet
-)
-CURRENT_USER_ROUTER.register(
-    '',
-    CurrentUserApiViewSet,
-    'user'
 )
 urlpatterns = [
     path(
@@ -54,8 +53,18 @@ urlpatterns = [
         site.urls
     ),
     path(
-        'api/auth/',
-        include('knox.urls')
+        'api/auth/login',
+        LoginApiView.as_view()
+    ),
+    path(
+        'api/auth/logout',
+        LogoutView.as_view(),
+        name = 'knox_logout'
+    ),
+    path(
+        'api/auth/logoutall',
+        LogoutAllView.as_view(),
+        name = 'knox_logoutall'
     ),
     path(
         'api/auth/register',
@@ -63,7 +72,7 @@ urlpatterns = [
     ),
     path(
         'api/auth/user',
-        include(CURRENT_USER_ROUTER.urls)
+        CurrentUserApiView.as_view()
     ),
     path(
         'api/config/status',
