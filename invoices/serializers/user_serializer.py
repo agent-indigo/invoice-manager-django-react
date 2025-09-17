@@ -106,7 +106,7 @@ class UserSerializer(ModelSerializer):
         return User.objects.create_superuser(
             **validated_data
         )
-    def partial_update(
+    def update(
         self,
         instance: User,
         validated_data: dict

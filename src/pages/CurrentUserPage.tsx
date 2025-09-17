@@ -147,7 +147,7 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
     }
   }
   const handleLogoutAll: Function = async (): Promise<void> => {
-    if (!window.confirm('Are you sure you want to log out from all devices? This action cannot be undone!')) {
+    if (window.confirm('Are you sure you want to log out from all devices? This action cannot be undone!')) {
       setLoading(true)
       const response: Response = await fetch(
         '/api/auth/logoutall', {
