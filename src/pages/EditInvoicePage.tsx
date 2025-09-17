@@ -94,7 +94,11 @@ const EditInvoicePage: FunctionComponent = (): ReactElement => {
       navigate('/invoices')
     }
     setLoading(false)
-  })()})
+  })()}, [
+    id,
+    navigate,
+    token
+  ])
   const handleSubmit: Function = async (): Promise<void> => {
     setLoading(true)
     const patch: FormData = new FormData()

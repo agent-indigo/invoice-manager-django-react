@@ -56,8 +56,8 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
     setErrorOccured
   ] = useState<boolean>(false)
   const [
-    error,
-    setError
+    errorMessage,
+    setErrorMessage
   ] = useState<string>('')
   const handleDelete: Function = async (id: string): Promise<void> => {
     setDeleting(true)
@@ -138,16 +138,23 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
   )
   useEffect((): void => {(async (): Promise<void> => {
     setLoading(true)
-    const response: Response = await fetch('/api/invoices')
+    const response: Response = await fetch(
+      '/api/invoices', {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }
+    )
     if (response.ok) {
       setInvoices(await response.json())
     } else {
       setErrorOccured(true)
-      setError(await response.text())
+      setErrorMessage(await response.text())
     }
     setLoading(false)
   })()}, [
-    setInvoices
+    setInvoices,
+    token
   ])
   return (
     <>
@@ -160,7 +167,7 @@ const InvoicesListPage: FunctionComponent = (): ReactElement => {
         <Loader/>
       ) : errorOccured ? (
         <Alert variant='danger'>
-          {error}
+          {errorMessage}
         </Alert>
       ) : (
         <>
