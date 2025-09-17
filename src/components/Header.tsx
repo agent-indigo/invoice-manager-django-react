@@ -27,20 +27,19 @@ const Header: FunctionComponent = (): ReactElement => {
     setUser,
     setInvoices
   }: ContextProps = useGetContext()
-  const token: string = localStorage.getItem('token') ?? ''
   const navigate: NavigateFunction = useNavigate()
   const handleLogout: Function = async (): Promise<void> => {
     const response: Response = await fetch(
       '/api/auth/logout', {
         method: 'POST',
         headers: {
-          'Authorization': `Token ${token}`
+          'Authorization': `Token ${localStorage.getItem('token') ?? ''}`
         }
       }
     )
     if (response.ok) {
-      setUser(undefined)
       localStorage.removeItem('token')
+      setUser(undefined)
       setInvoices([])
       navigate('/welcome')
       toast.success('Logged out.')

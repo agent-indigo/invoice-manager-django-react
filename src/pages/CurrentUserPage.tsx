@@ -110,11 +110,11 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
       }
     )
     if (response.ok) {
-      setUser(await response.json())
-      toast.success('Changes saved.')
       setPassword('')
       setNewPassword('')
       setConfirmPassword('')
+      setUser(await response.json())
+      toast.success('Changes saved.')
     } else {
       toast.error(await response.text())
     }
@@ -135,10 +135,10 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
         }
       )
       if (response.ok) {
-        toast.success('Account deleted.')
-        setUser(undefined)
         localStorage.removeItem('token')
         setInvoices([])
+        setUser(undefined)
+        toast.success('Account deleted.')
         navigate('/welcome')
       } else {
         toast.error(await response.text())
@@ -158,10 +158,10 @@ const CurrentUserPage: FunctionComponent = (): ReactElement => {
         }
       )
       if (response.ok) {
-        toast.success('Logged out from all devices.')
-        setUser(undefined)
         localStorage.removeItem('token')
         setInvoices([])
+        setUser(undefined)
+        toast.success('Logged out from all devices.')
         navigate('/welcome')
       } else {
         toast.error(await response.text())
