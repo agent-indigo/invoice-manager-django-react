@@ -12,24 +12,24 @@ class InvoiceApiViewSet(ModelViewSet):
     """
     Invoice API view set
     """
-    queryset = Invoice.objects.none()
-    serializer_class = InvoiceSerializer
     permission_classes = [
         IsAuthenticated
     ]
+    serializer_class = InvoiceSerializer
+    queryset = Invoice.objects.none()
+    def get_queryset(self):
+        """
+        Get all invoices owned by the currently logged in user
+        """
+        return Invoice.objects.filter(
+            user_id = self.request.user.id
+        )
     def get_object(self):
         """
         Get a single invoice
         """
         return Invoice.objects.get(
             id = self.kwargs.get('pk'),
-            user_id = self.request.user.id
-        )
-    def get_queryset(self):
-        """
-        Get all invoices owned by the currently logged in user
-        """
-        return Invoice.objects.filter(
             user_id = self.request.user.id
         )
     def perform_create(
