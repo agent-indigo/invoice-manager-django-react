@@ -26,7 +26,6 @@ import {useGetContext} from '../components/ContextProvider'
 import ContextProps from '@/types/ContextProps'
 const AddInvoicePage: FunctionComponent = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate()
-  const token: string = localStorage.getItem('token') ?? ''
   const {
     invoices,
     setInvoices
@@ -73,7 +72,7 @@ const AddInvoicePage: FunctionComponent = (): ReactElement => {
           total
         }),
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${localStorage.getItem('token') ?? ''}`,
           'Content-Type': 'application/json'
         }
       }
